@@ -1,0 +1,104 @@
+---
+title: "Lab 7"
+author: "Mark Tello-Rincon"
+format: html
+editor: visual
+embed-resources: true
+theme: cerulean
+---
+
+#### Set-up
+
+```{r}
+library(httr)
+library(xml2)
+library(stringr)
+```
+
+### Question 1
+
+How many Sars-Cov-2 papers?
+
+```{r}
+## website
+website <- xml2::read_html("https://pubmed.ncbi.nlm.nih.gov/?term=sars-cov-2")
+
+## counts
+counts <- xml2::xml_find_first(website, "//span[@class='value']")
+
+## turn into text
+counts <- as.character(counts)
+
+## extracting data using regex
+totalcount <- str_extract(counts, "[0-9,]+")
+
+## remove commas to convert to numeric
+totalcount <- gsub(",", "", totalcount)
+totalcount <- as.numeric(totalcount)
+print(totalcount)
+```
+
+### Question 2
+
+```{r}
+## text file
+abstracts <- readLines('~/Library/CloudStorage/GoogleDrive-tellorin@usc.edu/.shortcut-targets-by-id/10yI1Vp2x44iBX7T-_NfWNeL7go8kwnUH/2. College - USC/1. Degree/1. Courses/Y4 Senior/Fall 2025/PM 566/PM566-Repository/Lab/Lab 7/Lab 7/data/abstract-sars-cov-2-set.txt', warn = FALSE)
+
+## combine all text into one character
+abstracts <- paste(abstracts, collapse = '\n')
+
+## split text whenever 3 new lines occur in a row (two blank lines)
+abstracts <- unlist(strsplit(abstracts, split = '\n\n\n'))
+
+## replace any remaining "\n" symbols with spaces
+abstracts <- gsub("\n", " ", abstracts)
+
+## replace multiple spaces with single space
+abstracts <- gsub(" +", " ", abstracts)
+```
+
+### Question 3
+
+What are the 10 most common institutions? Discuss how you could you improve these results.
+
+-   The ten most common institutions are the University of California, University of Pennsylvania, and Stanford University, but also contain noisy entries like `from University` and `at University`. To improve the results, we could refine the regex to use full, capitalized institution patterns, standardize variations in names like `UC ____` and `University of California, ____`, remove trailing punctuation or prepositions, and grouping similar names.
+
+```{r}
+institution <- str_extract_all(
+  abstracts,
+  "([[:alpha:]-]+\\s+University|University\\s+of\\s+[[:alpha:]-]+|[[:alpha:]-]+\\s+Institute\\s+of\\s+[[:alpha:]-]+)"
+) 
+institution <- unlist(institution)
+
+head(sort(table(institution), decreasing = TRUE), 10)
+```
+
+### Question 4
+
+```{r}
+abstracts <- readLines('~/Library/CloudStorage/GoogleDrive-tellorin@usc.edu/.shortcut-targets-by-id/10yI1Vp2x44iBX7T-_NfWNeL7go8kwnUH/2. College - USC/1. Degree/1. Courses/Y4 Senior/Fall 2025/PM 566/PM566-Repository/Lab/Lab 7/Lab 7/data/abstract-sars-cov-2-set.txt', warn = FALSE)
+abstracts <- paste(abstracts, collapse = '\n')
+abstracts <- unlist(strsplit(abstracts, split = '\n\n\n'))
+
+journal <- str_extract(abstracts, "^[0-9]+\\.\\s[^\n]+")
+
+titles <- sapply(abstracts, function(x){
+  unlist(strsplit(x, split = "\n\n"))[2]
+}, USE.NAMES = FALSE)
+
+authors <- sapply(abstracts, function(x){
+  unlist(strsplit(x, split = "\n\n"))[3]
+}, USE.NAMES = FALSE)
+
+affiliations <- str_extract(abstracts, "Author information:[\\s\\S]*?(?=\\n\\n|$)")
+
+papers <- data.frame(
+  Journal = journal,
+  Title = titles,
+  Authors = authors,
+  Affiliations = affiliations,
+  stringsAsFactors = FALSE
+)
+
+knitr::kable(papers[1:5, ])
+```

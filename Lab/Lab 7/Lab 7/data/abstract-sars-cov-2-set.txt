@@ -1,0 +1,507 @@
+1. Cell. 2021 Sep 16;184(19):4848-4856. doi: 10.1016/j.cell.2021.08.017. Epub 2021 
+Aug 19.
+
+The origins of SARS-CoV-2: A critical review.
+
+Holmes EC(1), Goldstein SA(2), Rasmussen AL(3), Robertson DL(4), Crits-Christoph 
+A(5), Wertheim JO(6), Anthony SJ(7), Barclay WS(8), Boni MF(9), Doherty PC(10), 
+Farrar J(11), Geoghegan JL(12), Jiang X(13), Leibowitz JL(14), Neil SJD(15), 
+Skern T(16), Weiss SR(17), Worobey M(18), Andersen KG(19), Garry RF(20), Rambaut 
+A(21).
+
+Author information:
+(1)Marie Bashir Institute for Infectious Diseases and Biosecurity, School of 
+Life and Environmental Sciences and School of Medical Sciences, The University 
+of Sydney, Sydney, NSW 2006, Australia. Electronic address: 
+edward.holmes@sydney.edu.au.
+(2)Department of Human Genetics, University of Utah, Salt Lake City, UT 84112, 
+USA.
+(3)Vaccine and Infectious Disease Organization, University of Saskatchewan, 
+Saskatoon, SK S7N 5E3, Canada.
+(4)MRC-University of Glasgow Centre for Virus Research, Glasgow G61 1QH, UK.
+(5)Department of Plant and Microbial Biology, University of California-Berkeley, 
+Berkeley, CA 94704, USA.
+(6)Department of Medicine, University of California-San Diego, La Jolla, CA 
+92093, USA.
+(7)Department of Pathology, Microbiology, and Immunology, University of 
+California-Davis School of Veterinary Medicine, Davis, CA 95616, USA.
+(8)Department of Infectious Disease, Imperial College, London W2 1PG, UK.
+(9)Center for Infectious Disease Dynamics, Department of Biology, The 
+Pennsylvania State University, University Park, PA 16802, USA.
+(10)Department of Microbiology and Immunology, The University of Melbourne at 
+the Doherty Institute, 792 Elizabeth Street, Melbourne, VIC 3000, Australia.
+(11)The Wellcome Trust, London NW1 2BE, UK.
+(12)Department of Microbiology and Immunology, University of Otago, Dunedin 
+9010, New Zealand; Institute of Environmental Science and Research, Wellington 
+5022, New Zealand.
+(13)Department of Biological Sciences, Xi'an Jiaotong-Liverpool University 
+(XJTLU), Suzhou, China.
+(14)Department of Microbial Pathogenesis and Immunology, Texas A&M University, 
+College Station, TX 77807, USA.
+(15)Department of Infectious Diseases, King's College London, Guy's Hospital, 
+London SE1 9RT, UK.
+(16)Max Perutz Labs, Medical University of Vienna, Vienna Biocenter, Dr. 
+Bohr-Gasse 9/3, 1030 Vienna, Austria.
+(17)Department of Microbiology, Perelman School of Medicine, University of 
+Pennsylvania, Philadelphia, PA 19104, USA.
+(18)Department of Ecology and Evolutionary Biology, University of Arizona, 
+Tucson, AZ 85721, USA.
+(19)Department of Immunology and Microbiology, The Scripps Research Institute, 
+La Jolla, CA 92037, USA.
+(20)Department of Microbiology and Immunology, Tulane University School of 
+Medicine, New Orleans, LA 70112, USA; Zalgen Labs, Germantown, MD 20876, USA.
+(21)Institute of Evolutionary Biology, University of Edinburgh, Edinburgh EH9 
+3FL, UK. Electronic address: a.rambaut@ed.ac.uk.
+
+Since the first reports of a novel severe acute respiratory syndrome (SARS)-like 
+coronavirus in December 2019 in Wuhan, China, there has been intense interest in 
+understanding how severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) 
+emerged in the human population. Recent debate has coalesced around two 
+competing ideas: a "laboratory escape" scenario and zoonotic emergence. Here, we 
+critically review the current scientific evidence that may help clarify the 
+origin of SARS-CoV-2.
+
+Copyright © 2021 The Author(s). Published by Elsevier Inc. All rights reserved.
+
+DOI: 10.1016/j.cell.2021.08.017
+PMCID: PMC8373617
+PMID: 34480864 [Indexed for MEDLINE]
+
+Conflict of interest statement: Declaration of interests E.C.H. is an honorary 
+visiting professor at Fudan University (Shanghai Public Health Clinical Center), 
+Shanghai, China and, from 2014–2020, was a guest professor at the Chinese Center 
+for Disease Control and Prevention, Beijing, China. These affiliations are only 
+used in papers co-authored with Prof. Yong-Zhen Zhang (Shanghai Public Health 
+Clinical Center) and involve no formal appointment, no duties, and no 
+remuneration nor research funding. J.O.W. receives funding from the U.S. Centers 
+for Disease Control and Prevention (ongoing) via grants and contracts to his 
+institution unrelated to this research. S.R.W. consults for Immunome and Ocugen. 
+A.R., A.L.R., M.F.B., S.A.G., and K.G.A. have received consulting fees and 
+compensation for expert testimony on SARS-CoV-2 and the COVID-19 pandemic. 
+R.F.G. is co-founder of Zalgen Labs.
+
+
+2. Science. 2021 Dec 3;374(6572):abm0829. doi: 10.1126/science.abm0829. Epub 2021 
+Dec 3.
+
+mRNA vaccines induce durable immune memory to SARS-CoV-2 and variants of 
+concern.
+
+Goel RR(#)(1)(2), Painter MM(#)(1)(2), Apostolidis SA(#)(1)(2)(3), Mathew 
+D(#)(1)(2), Meng W(1)(4), Rosenfeld AM(1)(4), Lundgreen KA(5), Reynaldi A(6), 
+Khoury DS(6), Pattekar A(2), Gouma S(5), Kuri-Cervantes L(1)(5), Hicks P(5), 
+Dysinger S(5), Hicks A(2), Sharma H(2), Herring S(2), Korte S(2), Baxter AE(1), 
+Oldridge DA(1)(4), Giles JR(1)(7)(8), Weirick ME(5), McAllister CM(5), Awofolaju 
+M(5), Tanenbaum N(5), Drapeau EM(5), Dougherty J(1), Long S(1), D'Andrea K(1), 
+Hamilton JT(2)(5), McLaughlin M(1), Williams JC(2), Adamski S(2), Kuthuru O(1); 
+UPenn COVID Processing Unit‡; Frank I(9), Betts MR(1)(5), Vella LA(10), Grifoni 
+A(11), Weiskopf D(11), Sette A(11)(12), Hensley SE(5), Davenport MP(6), Bates 
+P(5), Luning Prak ET(1)(4), Greenplate AR(1)(2), Wherry EJ(1)(2)(7)(8).
+
+Author information:
+(1)Institute for Immunology, University of Pennsylvania Perelman School of 
+Medicine, Philadelphia, PA, USA.
+(2)Immune Health, University of Pennsylvania Perelman School of Medicine, 
+Philadelphia, PA, USA.
+(3)Division of Rheumatology, University of Pennsylvania Perelman School of 
+Medicine, Philadelphia, PA, USA.
+(4)Department of Pathology and Laboratory Medicine, University of Pennsylvania 
+Perelman School of Medicine, Philadelphia, PA, USA.
+(5)Department of Microbiology, University of Pennsylvania Perelman School of 
+Medicine, Philadelphia, PA, USA.
+(6)Kirby Institute, University of New South Wales, Sydney, NSW, Australia.
+(7)Department of Systems Pharmacology and Translational Therapeutics, University 
+of Pennsylvania Perelman School of Medicine, Philadelphia, PA, USA.
+(8)Parker Institute for Cancer Immunotherapy, University of Pennsylvania 
+Perelman School of Medicine, Philadelphia, PA, USA.
+(9)Division of Infectious Disease, University of Pennsylvania Perelman School of 
+Medicine, Philadelphia, PA, USA.
+(10)Division of Infectious Disease, Department of Pediatrics, Children's 
+Hospital of Philadelphia, Philadelphia, PA, USA.
+(11)Center for Infectious Disease and Vaccine Research, La Jolla Institute for 
+Immunology (LJI), La Jolla, CA, USA.
+(12)Department of Medicine, Division of Infectious Diseases and Global Public 
+Health, University of California San Diego (UCSD), La Jolla, CA, USA.
+(#)Contributed equally
+
+Comment in
+    Immunol Cell Biol. 2022 Jan;100(1):15-17. doi: 10.1111/imcb.12511.
+
+Update of
+    bioRxiv. 2021 Aug 23:2021.08.23.457229. doi: 10.1101/2021.08.23.457229.
+
+The durability of immune memory after severe acute respiratory syndrome 
+coronavirus 2 (SARS-CoV-2) messenger RNA (mRNA) vaccination remains unclear. In 
+this study, we longitudinally profiled vaccine responses in SARS-CoV-2–naïve and 
+–recovered individuals for 6 months after vaccination. Antibodies declined from 
+peak levels but remained detectable in most subjects at 6 months. By contrast, 
+mRNA vaccines generated functional memory B cells that increased from 3 to 6 
+months postvaccination, with the majority of these cells cross-binding the 
+Alpha, Beta, and Delta variants. mRNA vaccination further induced 
+antigen-specific CD4+ and CD8+ T cells, and early CD4+ T cell responses 
+correlated with long-term humoral immunity. Recall responses to vaccination in 
+individuals with preexisting immunity primarily increased antibody levels 
+without substantially altering antibody decay rates. Together, these findings 
+demonstrate robust cellular immune memory to SARS-CoV-2 and its variants for at 
+least 6 months after mRNA vaccination.
+
+DOI: 10.1126/science.abm0829
+PMCID: PMC9284784
+PMID: 34648302 [Indexed for MEDLINE]
+
+
+3. Occup Environ Med. 2021 Nov;78(11):789-792. doi: 10.1136/oemed-2021-107461. Epub 
+2021 Aug 25.
+
+SARS-CoV-2 antibody seroprevalence among firefighters in Orange County, 
+California.
+
+Vieira V(1)(2), Tang IW(3), Bartell S(3)(2), Zahn M(4), Fedoruk MJ(3)(2).
+
+Author information:
+(1)Department of Environmental and Occupational Health, University of California 
+Irvine Susan and Henry Samueli College of Health Sciences, Irvine, California, 
+USA vvieira@uci.edu.
+(2)University of California Irvine Center for Occupational and Environmental 
+Health, Irvine, California, USA.
+(3)Department of Environmental and Occupational Health, University of California 
+Irvine Susan and Henry Samueli College of Health Sciences, Irvine, California, 
+USA.
+(4)Orange County Health Care Agency, Santa Ana, California, USA.
+
+OBJECTIVES: We conducted serological SARS-CoV-2 antibody testing from October to 
+November 2020 to estimate the SARS-CoV-2 seroprevalence among 
+firefighters/paramedics in Orange County (OC), California.
+METHODS: OC firefighters employed at the time of the surveillance activity were 
+invited to participate in a voluntary survey that collected demographic, 
+occupational and previous COVID-19 testing data, and a SARS-CoV-2 immunoglobulin 
+(Ig)G antibody blood test. We collected venous blood samples using mobile 
+phlebotomy teams that travelled to individual fire stations, in coordination 
+with an annual tuberculosis testing campaign for firefighters employed by OC 
+Fire Authority (OCFA), and independently for firefighters employed by cities. We 
+estimated seroprevalence and assessed several potential predictors of 
+seropositivity.
+RESULTS: The seroprevalence was 5.3% among 923 OCFA personnel tested, with 92.2% 
+participating. Among firefighters self-reporting a previous positive COVID-19 
+antibody or PCR test result, twenty-one (37%) did not have positive IgG tests in 
+the current serosurvey. There were no statistically significant differences in 
+demographic characteristics between cases and non-cases. Work city was a 
+significant predictor of case status (p=0.015). Seroprevalence (4.8%) was 
+similar when aggregated across seven city fire departments 
+(42%-65% participation). In total, 1486°C fire personnel were tested.
+CONCLUSION: Using a strong serosurvey design and large firefighter cohort, we 
+observed a SARS-CoV-2 IgG seroprevalence of 5.3%. The seroprevalence among OC 
+firefighters in October 2020 was lower than the general county population 
+estimated seroprevalence (11.5%) in August. The difference may be due in part to 
+safety measures taken by OC fire departments at the start of the pandemic, as 
+well as differences in antibody test methods and/or duration of antibody 
+response.
+
+© Author(s) (or their employer(s)) 2021. No commercial re-use. See rights and 
+permissions. Published by BMJ.
+
+DOI: 10.1136/oemed-2021-107461
+PMID: 34433659 [Indexed for MEDLINE]
+
+Conflict of interest statement: Competing interests: None declared.
+
+
+4. Science. 2021 Aug 27;373(6558):eabd9149. doi: 10.1126/science.abd9149.
+
+Airborne transmission of respiratory viruses.
+
+Wang CC(1)(2)(3)(4), Prather KA(5), Sznitman J(6), Jimenez JL(6)(7), Lakdawala 
+SS(8), Tufekci Z(9), Marr LC(3)(10).
+
+Author information:
+(1)Department of Chemistry, National Sun Yat-sen University, Kaohsiung, Taiwan 
+804, Republic of China. chiawang@mail.nsysu.edu.tw kprather@ucsd.edu.
+(2)Scripps Institution of Oceanography, University of California San Diego, La 
+Jolla, CA 92037, USA.
+(3)Aerosol Science Research Center, National Sun Yat-sen University, Kaohsiung, 
+Taiwan 804, Republic of China.
+(4)Department of Chemistry, National Sun Yat-sen University, Kaohsiung, Taiwan 
+804, Republic of China.
+(5)Scripps Institution of Oceanography, University of California San Diego, La 
+Jolla, CA 92037, USA. chiawang@mail.nsysu.edu.tw kprather@ucsd.edu.
+(6)Department of Biomedical Engineering, Israel Institute of Technology, Haifa 
+32000, Israel.
+(7)Department of Chemistry and CIRES, University of Colorado, Boulder, CO 80309, 
+USA.
+(8)Department of Microbiology and Molecular Genetics, University of Pittsburgh 
+School of Medicine, Pittsburgh, PA 15219, USA.
+(9)School of Information and Department of Sociology, University of North 
+Carolina, Chapel Hill, NC 27599, USA.
+(10)Department of Civil and Environmental Engineering, Virginia Tech, 
+Blacksburg, VA 24061, USA.
+
+Comment in
+    Swiss Med Wkly. 2021 Nov 29;151:w30096. doi: 10.4414/smw.2021.w30096.
+
+The COVID-19 pandemic has revealed critical knowledge gaps in our understanding 
+of and a need to update the traditional view of transmission pathways for 
+respiratory viruses. The long-standing definitions of droplet and airborne 
+transmission do not account for the mechanisms by which virus-laden respiratory 
+droplets and aerosols travel through the air and lead to infection. In this 
+Review, we discuss current evidence regarding the transmission of respiratory 
+viruses by aerosols-how they are generated, transported, and deposited, as well 
+as the factors affecting the relative contributions of droplet-spray deposition 
+versus aerosol inhalation as modes of transmission. Improved understanding of 
+aerosol transmission brought about by studies of severe acute respiratory 
+syndrome coronavirus 2 (SARS-CoV-2) infection requires a reevaluation of the 
+major transmission pathways for other respiratory viruses, which will allow 
+better-informed controls to reduce airborne transmission.
+
+Copyright © 2021 The Authors, some rights reserved; exclusive licensee American 
+Association for the Advancement of Science. No claim to original U.S. Government 
+Works.
+
+DOI: 10.1126/science.abd9149
+PMCID: PMC8721651
+PMID: 34446582 [Indexed for MEDLINE]
+
+
+5. Sci Rep. 2021 Feb 4;11(1):3081. doi: 10.1038/s41598-021-82662-x.
+
+Estimated seroprevalence of SARS-CoV-2 antibodies among adults in Orange County, 
+California.
+
+Bruckner TA(1), Parker DM(2), Bartell SM(2)(3), Vieira VM(2), Khan S(4), Noymer 
+A(2), Drum E(2), Albala B(5), Zahn M(6), Boden-Albala B(7).
+
+Author information:
+(1)Program in Public Health, University of California, Irvine, 653 E. Peltason 
+Dr, Irvine, CA, 92697, USA. tim.bruckner@uci.edu.
+(2)Program in Public Health, University of California, Irvine, 653 E. Peltason 
+Dr, Irvine, CA, 92697, USA.
+(3)Department of Statistics, University of California, Irvine, Bren Hall 2019, 
+Irvine, CA, 92697-1250, USA.
+(4)School of Medicine, University of California, Irvine, 1001 Health Sciences 
+Rd, Irvine, CA, 92697, USA.
+(5)Center for Clinical Research, School of Medicine, University of California, 
+Irvine, 1001 Health Sciences Rd, Irvine, CA, 92617, USA.
+(6)Orange County Health Care Agency, 405 W. 5th St., Santa Ana, CA, 92701, USA.
+(7)Program in Public Health, University of California, Irvine, 653 E. Peltason 
+Dr, Irvine, CA, 92697, USA. BBODENAL@hs.uci.edu.
+
+Clinic-based estimates of SARS-CoV-2 may considerably underestimate the total 
+number of infections. Access to testing in the US has been heterogeneous and 
+symptoms vary widely in infected persons. Public health surveillance efforts and 
+metrics are therefore hampered by underreporting. We set out to provide a 
+minimally biased estimate of SARS-CoV-2 seroprevalence among adults for a large 
+and diverse county (Orange County, CA, population 3.2 million). We implemented a 
+surveillance study that minimizes response bias by recruiting adults to answer a 
+survey without knowledge of later being offered SARS-CoV-2 test. Several 
+methodologies were used to retrieve a population-representative sample. 
+Participants (n = 2979) visited one of 11 drive-thru test sites from July 10th 
+to August 16th, 2020 (or received an in-home visit) to provide a finger 
+pin-prick sample. We applied a robust SARS-CoV-2 Antigen Microarray technology, 
+which has superior measurement validity relative to FDA-approved tests. 
+Participants include a broad age, gender, racial/ethnic, and income 
+representation. Adjusted seroprevalence of SARS-CoV-2 infection was 11.5% (95% 
+CI: 10.5-12.4%). Formal bias analyses produced similar results. Prevalence was 
+elevated among Hispanics (vs. other non-Hispanic: prevalence ratio [PR] = 1.47, 
+95% CI 1.22-1.78) and household income < $50,000 (vs. > $100,000: PR = 1.42, 95% 
+CI: 1.14 to 1.79). Results from a diverse population using a highly specific and 
+sensitive microarray indicate a SARS-CoV-2 seroprevalence of ~ 12 percent. This 
+population-based seroprevalence is seven-fold greater than that using official 
+County statistics. In this region, SARS-CoV-2 also disproportionately affects 
+Hispanic and low-income adults.
+
+DOI: 10.1038/s41598-021-82662-x
+PMCID: PMC7862219
+PMID: 33542329 [Indexed for MEDLINE]
+
+Conflict of interest statement: Dr. Saahir Khan reports grants from University 
+of California Office of the President and from National Institutes of Health 
+during the conduct of the study. In addition, Dr. Khan has a patent “Devices For 
+Detecting Antibodies To Coronavirus Antigens And Methods for Using Them,” 
+Provisional Patent No. 62/993,610, filed March 23, 2020, licensed to Nanommune 
+Inc. Saahir Khan is a consultant for and owns shares in Nanommune Inc. which is 
+commercializing the technology used in this study. All other Authors (Drs. 
+Bruckner, Parker, Bartell, Vieira, Drum, Noymer, Albala, Boden-Albala, Zahn) 
+declare no potential conflict of interest.
+
+
+6. MMWR Morb Mortal Wkly Rep. 2021 Oct 8;70(40):1415-1419. doi: 
+10.15585/mmwr.mm7040a4.
+
+Distribution of SARS-CoV-2 Variants in a Large Integrated Health Care System - 
+California, March-July 2021.
+
+Malden DE, Bruxvoort KJ, Tseng HF, Ackerson B, Choi SK, Florea A, Tubert J, 
+Takhar H, Aragones M, Hong V, Talarico CA, McLaughlin JM, Qian L, Tartof SY.
+
+Data from observational studies demonstrate that variants of SARS-CoV-2, the 
+virus that causes COVID-19, have evolved rapidly across many countries (1,2). 
+The SARS-CoV-2 B.1.617.2 (Delta) variant of concern is more transmissible than 
+previously identified variants,* and as of September 2021, is the predominant 
+variant in the United States.† Studies characterizing the distribution and 
+severity of illness caused by SARS-CoV-2 variants, particularly the Delta 
+variant, are limited in the United States (3), and are subject to limitations 
+related to study setting, specimen collection, study population, or study period 
+(4-7). This study used whole genome sequencing (WGS) data on SARS-CoV-2-positive 
+specimens collected across Kaiser Permanente Southern California (KPSC), a large 
+integrated health care system, to describe the distribution and risk of 
+hospitalization associated with SARS-CoV-2 variants during March 4-July 21, 
+2021, by patient vaccination status. Among 13,039 SARS-CoV-2-positive specimens 
+identified from KPSC patients during this period, 6,798 (52%) were sequenced and 
+included in this report. Of these, 5,994 (88%) were collected from unvaccinated 
+persons, 648 (10%) from fully vaccinated persons, and 156 (2%) from partially 
+vaccinated persons. Among all sequenced specimens, the weekly percentage of 
+B.1.1.7 (Alpha) variant infections increased from 20% to 67% during March 4-May 
+19, 2021. During April 15-July 21, 2021, the weekly percentage of Delta variant 
+infections increased from 0% to 95%. During March 4-July 21, 2021, the weekly 
+percentage of variants was similar among fully vaccinated and unvaccinated 
+persons, but the Delta variant was more commonly identified among vaccinated 
+persons then unvaccinated persons overall, relative to other variants. The Delta 
+variant was more prevalent among younger persons, with the highest percentage 
+(55%) identified among persons aged 18-44 years. Infections attributed to the 
+Delta variant were also more commonly identified among non-Hispanic Black 
+persons, relative to other variants. These findings reinforce the importance of 
+continued monitoring of SARS-CoV-2 variants and implementing multiple COVID-19 
+prevention strategies, particularly during the current period in which Delta is 
+the predominant variant circulating in the United States.
+
+DOI: 10.15585/mmwr.mm7040a4
+PMCID: PMC8519275
+PMID: 34618801 [Indexed for MEDLINE]
+
+Conflict of interest statement: All authors have completed and submitted the 
+International Committee of Medical Journal Editors form for disclosure of 
+potential conflicts of interest. The following authors received funding for work 
+unrelated to this study: Katia J. Bruxvoort (Dynavax Technologies, Gilead 
+Sciences Inc., GlaxoSmithKline plc., Moderna, Inc., Pfizer Inc., and Seqirus); 
+Bradley Ackerson (Dynavax Technologies, GlaxoSmithKline plc., Moderna, Inc., 
+Pfizer Inc., and Seqirus); Ana Florea (GlaxoSmithKline plc., Moderna, Inc., 
+Pfizer Inc., and Gilead Sciences Inc.); Julia Tubert (Moderna, Inc.); Harpreet 
+Takhar (ALK, GlaxoSmithKline plc., Moderna, Inc., Pfizer Inc., and Wellcome); 
+Sara Y. Tartof (Genentech, Gilead Sciences Inc., GlaxoSmithKline plc., Pfizer 
+Inc., Spero Therapeutics, and Wellcome); and Lei Qian (Dynavax Technologies, 
+Genentech, GlaxoSmithKline plc., and Moderna, Inc.). Hung Fu Tseng received 
+funding for work unrelated to this study from GlaxoSmithKline plc. and Moderna, 
+Inc. and served on advisory boards for Janssen (Johnson & Johnson) and Pfizer 
+Inc. John M. McLaughlin holds stock and stock options in Pfizer Inc. Carla A. 
+Talarico is a shareholder in Moderna, Inc. No other potential conflicts of 
+interest were disclosed.
+
+
+7. N Engl J Med. 2021 May 6;384(18):1774-1775. doi: 10.1056/NEJMc2101927. Epub 2021 
+Mar 23.
+
+SARS-CoV-2 Infection after Vaccination in Health Care Workers in California.
+
+Keehner J(1), Horton LE(1), Pfeffer MA(2), Longhurst CA(1), Schooley RT(1), 
+Currier JS(3), Abeles SR(4), Torriani FJ(4).
+
+Author information:
+(1)UC San Diego Health, San Diego, CA.
+(2)David Geffen School of Medicine at University of California, Los Angeles 
+(UCLA), Los Angeles, CA.
+(3)David Geffen School of Medicine at UCLA, Los Angeles, CA.
+(4)UC San Diego Health, San Diego, CA ftorriani@health.ucsd.edu.
+
+Comment in
+    N Engl J Med. 2021 Jul 8;385(2):e8. doi: 10.1056/NEJMc2106004.
+
+DOI: 10.1056/NEJMc2101927
+PMCID: PMC8008750
+PMID: 33755376 [Indexed for MEDLINE]
+
+
+8. Public Health Rep. 2021 Sep-Oct;136(5):543-547. doi: 10.1177/00333549211026778. 
+Epub 2021 Jun 23.
+
+Increases in SARS-CoV-2 Test Positivity Rates Among Hispanic People in a 
+Northern California Health System.
+
+Rodriguez F(1)(2), Coquet J(3), Harrington R(3), Hernandez-Boussard T(3)(4)(5).
+
+Author information:
+(1)158423 Division of Cardiovascular Medicine and Cardiovascular Institute, 
+Stanford University, Stanford, CA, USA.
+(2)Stanford Prevention Research Center, Stanford University, Stanford, CA, USA.
+(3)Department of Medicine, Stanford University, Stanford, CA, USA.
+(4)Department of Biomedical Data Sciences, Stanford University, Stanford, CA, 
+USA.
+(5)Department of Surgery, Stanford University, Stanford, CA, USA.
+
+Racial/ethnic minority groups are disproportionately affected by the COVID-19 
+pandemic. We examined ethnic differences in SARS-CoV-2 testing patterns and 
+positivity rates in a large health care system in Northern California. The study 
+population included patients tested for SARS-CoV-2 from March 4, 2020, through 
+January 12, 2021, at Stanford Health Care. We used adjusted hierarchical 
+logistic regression models to identify factors associated with receiving a 
+positive test result. During the study period, 282 916 SARS-CoV-2 tests were 
+administered to 179 032 unique patients, 32 766 (18.3%) of whom were Hispanic. 
+Hispanic patients were 3 times more likely to receive a positive test result 
+than patients in other racial/ethnic groups (odds ratio = 3.16; 95% CI, 
+3.00-3.32). The rate of receiving a positive test result for SARS-CoV-2 among 
+Hispanic patients increased from 5.4% in mid-March to 15.7% in mid-July, 
+decreased to 3.9% in mid-October, and increased to 21.2% toward the end of 
+December. Hispanic patients were more likely than non-Hispanic patients to 
+receive a positive test result for SARS-CoV-2, with increasing trends during 
+regional surges. The disproportionate and growing overrepresentation of Hispanic 
+people receiving a positive test result for SARS-CoV-2 demonstrates the need to 
+focus public health prevention efforts on these communities.
+
+DOI: 10.1177/00333549211026778
+PMCID: PMC8361563
+PMID: 34161176 [Indexed for MEDLINE]
+
+Conflict of interest statement: Declaration of Conflicting Interests: The 
+authors declared no potential conflicts of interest with respect to the 
+research, authorship, and/or publication of this article.
+
+
+9. Emerg Infect Dis. 2021 Nov;27(11):2761-2767. doi: 10.3201/eid2711.211449. Epub 
+2021 Sep 1.
+
+Effectiveness of Abbott BinaxNOW Rapid Antigen Test for Detection of SARS-CoV-2 
+Infections in Outbreak among Horse Racetrack Workers, California, USA.
+
+Surasi K, Cummings KJ, Hanson C, Morris MK, Salas M, Seftel D, Ortiz L, 
+Thilakaratne R, Stainken C, Wadford DA.
+
+The Abbott BinaxNOW rapid antigen test is cheaper and faster than real-time 
+reverse transcription PCR (rRT-PCR) for detecting severe acute respiratory 
+syndrome coronavirus 2. We compared BinaxNOW with rRT-PCR in 769 paired 
+specimens from 342 persons during a coronavirus disease outbreak among horse 
+racetrack workers in California, USA. We found positive percent agreement was 
+43.3% (95% CI 34.6%-52.4%), negative percent agreement 100% (95% CI 99.4%-100%), 
+positive predictive value 100% (95% CI 93.5%-100%), and negative predictive 
+value 89.9% (95% CI 87.5%-92.0%). Among 127 rRT-PCR-positive specimens, the 55 
+with paired BinaxNOW-positive results had a lower mean cycle threshold than the 
+72 with paired BinaxNOW-negative results (17.8 vs. 28.5; p<0.001). Of 100 
+specimens with cycle threshold <30, a total of 51 resulted in positive virus 
+isolation; 45 (88.2%) of those were BinaxNOW-positive. Our comparison supports 
+immediate isolation for BinaxNOW-positive persons and confirmatory testing for 
+negative persons.
+
+DOI: 10.3201/eid2711.211449
+PMCID: PMC8544964
+PMID: 34469287 [Indexed for MEDLINE]
+
+
+10. Ocul Immunol Inflamm. 2021 May 19;29(4):629-630. doi: 
+10.1080/09273948.2021.1970423.
+
+SARS-CoV-2, COVID-19, and the Eye.
+
+Cunningham ET(1)(2)(3), Zierhut M(4).
+
+Author information:
+(1)The Department of Ophthalmology, California Pacific Medical Center, San 
+Francisco, California, USA.
+(2)The Department of Ophthalmology, Stanford University School of Medicine, 
+Stanford, California, USA.
+(3)The Francis I. Proctor Foundation, UCSF School of Medicine, San Francisco, 
+California, USA.
+(4)Centre for Ophthalmology, University Tuebingen, Tuebingen, Germany.
+
+Comment on
+    Ocul Immunol Inflamm. 2021 May 19;29(4):684-689. doi: 
+10.1080/09273948.2021.1896008.
+
+DOI: 10.1080/09273948.2021.1970423
+PMID: 34596492 [Indexed for MEDLINE]

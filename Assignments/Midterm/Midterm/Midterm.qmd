@@ -1,0 +1,824 @@
+---
+title: "Neonatal Mortality by Cause, Country, & Region"
+author: "Mark Tello-Rincon"
+format:
+  html:
+    toc: true
+    toc-title: "Table of Contents"
+    toc-location: right
+    toc-depth: 4
+editor: visual
+embed-resources: true
+---
+
+### Introduction
+
+Neonatal mortality remains one of the most pressing challenges in global health, accounting for nearly half of all deaths in children under five. Despite major advances in maternal and child health, millions of newborns continue to die each year, often due to preventable causes. Infectious diseases such as sepsis, respiratory infections, and diarrheal illnesses disproportionately affect neonates in low-resource settings, where access to clean delivery environments, timely diagnosis, and neonatal care is limited. For reference, the neonatal period is 0 to 28 days of life.
+
+This wrtitten report's central question is:
+
+::: {.callout-note appearance="minimal" icon="false"}
+**To what extent do patterns of neonatal mortality differ across WHO regions, particularly in the dominance of infectious versus non-infectious causes?**
+:::
+
+By looking at trends and cause distributions across geographic and economic contexts, the goal is to identify where neonatal deaths due to infectious diseases remain most concentrated, and how these patterns diverge from non-infectious deaths.\
+\
+
+------------------------------------------------------------------------
+
+### Data Preparation
+
+We will use [data from the World Health Organization](https://platform.who.int/data/maternal-newborn-child-adolescent-ageing/indicator-explorer-new/mca/number-of-neonatal-deaths---by-cause) (WHO) to visualize patterns of neonatal deaths across countries, regions, and income groups. The dataset includes cause-specific mortality counts from 2000 to 2021, separated by WHO region and country. Each record represents a specific cause of death for a given country or WHO region and year, with additional metadata such as WHO region (for country-level data), income classification (for country-level data), and data source. The dataset was imported into R and stored as a tidy data frame named `neo`.
+
+```{r}
+neo <- read.csv("~/Library/CloudStorage/GoogleDrive-tellorin@usc.edu/.shortcut-targets-by-id/10yI1Vp2x44iBX7T-_NfWNeL7go8kwnUH/2. College - USC/1. Degree/1. Courses/Y4 Senior/Fall 2025/PM 566/PM566-Repository/Assignments/Midterm/Midterm/data/neo.csv")
+```
+
+\
+To prepare the data for analysis, the following packages were installed: `dplyr`, `ggplot2`, `tidyr`, `knitr`, `scales`, `stringr`, `countrycode`, `rnaturalearth`, and `sf`.
+
+```{r, include=FALSE}
+library(ggplot2)
+library(tidyr)
+library(knitr)
+library(countrycode)
+library(rnaturalearth)
+library(sf)
+library(dplyr)
+library(scales)
+library(stringr)
+```
+
+\
+Variable names were also renamed for consistency and clarity.
+
+```{r}
+names(neo) <- c("indicator", "year", "abbrev", "country", "global", "region",
+                "income", "age", "cause", "source_short",
+                "source_long", "value_num", "value_string")
+```
+
+The renamed variables in the dataset are as follows:
+
+-   `indicator`: number of neonatal deaths - by cause
+-   `year`: year data was collected
+-   `abbrev`: country name, abbreviated *(country-level data only)*
+-   `country`: country name *(country-level data only)*
+-   `global`: if data is global level-only
+-   `region`: WHO region
+-   `income`: World Bank income level categorization
+-   `age`: age group
+-   `cause`: cause of death categorization
+-   `source_short`: data source
+-   `source_long`: data source
+-   `value_num`: number of deaths
+-   `value_string`: number of deaths
+
+\
+Before splitting the datasets into country-level, regional-level, and global-level data, a few other things were tidied up first.
+
+Region names were cleaned to ensure consistency across grouping operations and prevent mismatches due to capitalization or trailing whitespace. This converted all entries to lowercase and trimmed extra spaces. This was done to ensure that region labels, such as `Africa` and `africa`, are not treated as separate categories, leading to incorrect aggregations and visualizations.
+
+```{r}
+neo <- mutate(neo, region = tolower(trimws(region)))
+```
+
+\
+Then, data types were classified as either `global`, `country`, or `region`.
+
+```{r}
+neo <- mutate(neo,
+              data_type = case_when(
+                region == "global" ~ "global",
+                !is.na(country) & country != "" ~ "country",
+                TRUE ~ "region"))
+```
+
+\
+To ensure this was done properly, a quick check was performed to see how many rows of data per classification exist. When splitting the datasets later, we'll check again to make sure data types were not mixed together.
+
+```{r, echo=FALSE}
+as.data.frame(table(neo$data_type)) %>%
+  kable(col.names = c("Data Type", "Count"))
+```
+
+\
+Next, `cause` categories were identified in order to categorize types of diseases as infectious disease, non-infectious disease, or mixed. To check which types of causes were listed, let's check for unique values within this specific column.
+
+```{r, echo=FALSE}
+data.frame(Cause = sort(unique(neo$cause))) %>%
+  kable()
+```
+
+\
+The diseases were classified as follows:
+
+```{r}
+infectious <- c(
+  "HIV/AIDS", "Diarrhoeal diseases", "Tetanus", "Measles",
+  "Meningitis/encephalitis", "Malaria", "Acute lower respiratory infections",
+  "Sepsis and other infectious conditions of the newborn", "Tuberculosis")
+```
+
++-------------------------------------------------------+---------------------------------+---------------------------------------------------------------------+
+| Infectious diseases                                   | Non-infectious diseases         | Mixed                                                               |
++=======================================================+=================================+=====================================================================+
+| Acute lower respiratory infections                    | Birth asphyxia and birth trauma | Other Group 1 and Other noncommunicable (neonatal and under-5 only) |
+|                                                       |                                 |                                                                     |
+| Diarrhoeal diseases                                   | Congenital anomalies            |                                                                     |
+|                                                       |                                 |                                                                     |
+| HIV/AIDS                                              | Injuries                        |                                                                     |
+|                                                       |                                 |                                                                     |
+| Malaria                                               | Prematurity                     |                                                                     |
+|                                                       |                                 |                                                                     |
+| Measles                                               |                                 |                                                                     |
+|                                                       |                                 |                                                                     |
+| Meningitis/encephalitis                               |                                 |                                                                     |
+|                                                       |                                 |                                                                     |
+| Sepsis and other infectious conditions of the newborn |                                 |                                                                     |
+|                                                       |                                 |                                                                     |
+| Tetanus                                               |                                 |                                                                     |
+|                                                       |                                 |                                                                     |
+| Tuberculosis                                          |                                 |                                                                     |
++-------------------------------------------------------+---------------------------------+---------------------------------------------------------------------+
+
+\
+Now that the diseases have been categorized, a new column was created titled `cause_type`.
+
+```{r}
+neo <- neo %>%
+  mutate(cause_type = case_when(
+    cause %in% infectious ~ "infectious",
+    cause == "Other Group 1 and Other noncommunicable (neonatal and under-5 only)" ~ "mixed",
+    TRUE ~ "non-infectious"))
+```
+
+\
+To ensure this was done properly, a quick check was performed to see how many rows of data per classification exist.
+
+```{r, echo=FALSE}
+as.data.frame(table(neo$cause_type)) %>%
+  kable(col.names = c("Cause Type", "Count"))
+```
+
+\
+Now that the data is organized, we can split the datasets for easier analysis into a `country` dataset (looking at country-level data only), `region` dataset (looking at WHO regions only), and a `global` dataset (global-level data).
+
+```{r}
+country <- filter(neo, data_type == "country")
+region  <- filter(neo, data_type == "region")
+global  <- filter(neo, data_type == "global")
+```
+
+\
+To ensure the new datasets were created correctly, a quick check was performed to see how many rows of data were present in each dataset.
+
+```{r, echo=FALSE}
+data.frame(
+  Dataset = c("Country", "Region", "Global"),
+  Observations = c(nrow(country), nrow(region), nrow(global))) %>%
+  kable()
+```
+
+\
+
+------------------------------------------------------------------------
+
+### Exploratory Analysis
+
+To begin exploratory analysis, the size of the data was first checked for each dataset. In the `country` dataset, there are 59,752 observations with 15 variables. In the `region` dataset, there are 1,848 observations with 15 variables. In the `global` dataset, there are 308 observations with 15 variables.
+
+```{r, echo=FALSE}
+data.frame(
+  Dataset = c("Country", "Region", "Global"),
+  Rows = c(dim(country)[1], dim(region)[1], dim(global)[1]),
+  Columns = c(dim(country)[2], dim(region)[2], dim(global)[2])
+) %>%
+  kable()
+```
+
+\
+Next, each dataset was checked for any irregularities, specifically looking at the top and bottom. The structure appeared consistent across all three levels, with no missing columns, unexpected formatting, or anomalous values in the previewed rows.
+
+#### Country
+
+```{r, echo=FALSE}
+head(country, 3) %>%
+  kable(caption = "First 3 Rows of Country-Level Data")
+tail(country, 3) %>%
+  kable(caption = "Last 3 Rows of Country-Level Data")
+```
+
+#### Region
+
+```{r, echo=FALSE}
+head(region, 3) %>%
+  kable(caption = "First 3 Rows of Regional-Level Data")
+tail(region, 3) %>%
+  kable(caption = "Last 3 Rows of Regional-Level Data")
+```
+
+#### Global
+
+```{r, echo=FALSE}
+head(global, 3) %>%
+  kable(caption = "First 3 Rows of Global-Level Data")
+tail(global, 3) %>%
+  kable(caption = "Last 3 Rows of Global-Level Data")
+```
+
+\
+\
+Next, a deeper dive was taken into each dataset, using `str()`, to look at the structure of the data.
+
+```{r, echo=TRUE, results='hide'}
+str(country)
+str(region)
+str(global)
+```
+
+All datasets contain 15 variables, each representing neonatal mortality data separated by `cause` (character), `country` (character), `region` (character), and `year` (integer). Key variables include categorical fields like `country`, `region`, `income` (character), and `cause`, along with numeric estimates in both `value_num` (numeric) and `value_string` (numeric). The dataset also includes metadata such as source attribution (`source_short` (character), `source_long` (character)) and classification fields like `data_type` (character) and `cause_type` (character).
+
+The only difference between datasets are the number of observations. The `country` dataset has 59,752 observations, the `region` dataset has 1,848 observations, and the `global` dataset has 308 observations.
+
+\
+For a quick summary, minimum and maximum values for year were checked.
+
+```{r, echo=FALSE}
+data.frame(
+  Dataset = c("Country-level", "Regional-level", "Global-level"),
+  Min_Year = c(min(country$year), min(region$year), min(global$year)),
+  Max_Year = c(max(country$year), max(region$year), max(global$year))) %>%
+  kable(caption = "Year Range for Each Dataset")
+```
+
+\
+\
+To check that data was reported for each year, a histogram was created to visualize the distribution of data by year. This confirms that data is reported in full for each year between 2000 and 2021.
+
+```{r, fig.height=2, echo=FALSE}
+ggplot(country, aes(x = year)) +
+  geom_histogram(binwidth = 1, fill = "dodgerblue4", color = "black") +
+  labs(title = "Country-Level: Observations per Year", x = "Year", y = "Count") +
+  theme_bw()
+ggplot(region, aes(x = year)) +
+  geom_histogram(binwidth = 1, fill = "dodgerblue4", color = "black") +
+  labs(title = "Regional-Level: Observations per Year", x = "Year", y = "Count") +
+  theme_bw()
+ggplot(global, aes(x = year)) +
+  geom_histogram(binwidth = 1, fill = "dodgerblue4", color = "black") +
+  labs(title = "Global-Level: Observations per Year", x = "Year", y = "Count") +
+  theme_bw()
+```
+
+\
+For another quick summary, minimum and maximum values for observed cases of diseases were also checked to ensure no negative values were reported accidentally. Of which, there were none.
+
+```{r, echo=FALSE}
+data.frame(
+  Dataset = c("Country-level", "Regional-level", "Global-level"),
+  Min_Value = c(min(country$value_num, na.rm = TRUE),
+                min(region$value_num, na.rm = TRUE),
+                min(global$value_num, na.rm = TRUE)),
+  Max_Value = c(max(country$value_num, na.rm = TRUE),
+                max(region$value_num, na.rm = TRUE),
+                max(global$value_num, na.rm = TRUE))) %>%
+  kable(caption = "Range of value_num for Each Dataset")
+```
+
+\
+Looking closer into other variables, let's look at how many countries are reported in the `country` dataset, how many regions are reported in the `region` dataset, and how many observations there are in the `global` dataset. Looking at the results, there are 194 countries part of the `country` dataset, 6 regions included in the `region` dataset (which represent the 6 WHO regions), and 308 observations in the `global` dataset, which represents 21 years of data for each of the 14 diseases (`cause`). Mathematically, the variables add up correctly.
+
+```{r, echo=FALSE}
+data.frame(
+  Dataset = c("Country-level", "Regional-level", "Global-level"),
+  Unique_Entities = c(n_distinct(country$country),
+                      n_distinct(region$region),
+                      nrow(global))) %>%
+  kable(caption = "Entity Counts Across Datasets")
+```
+
+\
+Before continuing onto data visualization, one final check of the data was to check for NA values, of which, there were none.
+
+```{r, echo=FALSE}
+data.frame(
+  Dataset = c("Country-level", "Regional-level", "Global-level"),
+  NA_Count = c(sum(is.na(country)),
+               sum(is.na(region)),
+               sum(is.na(global)))
+) %>%
+  kable(caption = "NA Values in Each Dataset")
+```
+
+\
+
+------------------------------------------------------------------------
+
+### Preliminary Results
+
+As a reminder, the primary question is:
+
+::: {.callout-note appearance="minimal"}
+**To what extent do patterns of neonatal mortality differ across WHO regions, particularly in the dominance of infectious versus non-infectious causes?**
+:::
+
+Secondary interests include country-level data as well as over-all global data.
+
+#### Overall Trend: Total Neonatal Deaths Over Time
+
+First, let's look at the trend of neonatal deaths from 2000 to 2021. In 2000, there were over 4 million neonatal deaths globally, and by 2021, that number had dropped to under 2.5 million. This decline is visualized in the line chart below, which shows a steady downward trend over the two-decade period.
+
+```{r, echo=FALSE, warning=FALSE}
+country %>%
+  group_by(year) %>%
+  summarise(total_deaths = sum(value_num, na.rm = TRUE)) %>%
+  ggplot(aes(x = year, y = total_deaths)) +
+  scale_y_continuous(labels = scales::comma) +
+  geom_line(color = "dodgerblue4", size = 1.2) +
+  labs(x = "Year", y = "Total Deaths") +
+  theme_minimal()
+```
+
+To quantify this change more precisely, the table below highlights total neonatal deaths in three key years: 2000, 2010, and 2021. This steady decline reflects global improvements in maternal and newborn care.
+
+```{r, echo=FALSE}
+country %>%
+  filter(year %in% c(2000, 2010, 2021)) %>%
+  group_by(year) %>%
+  summarise(total_deaths = sum(value_num, na.rm = TRUE)) %>%
+  knitr::kable(caption = "Total Neonatal Deaths in Selected Years")
+```
+
+#### Cause-Specific Comparisons Over Time
+
+Since deaths have been trending down over time, it's important to examine how different cause types have contributed to that decline. As shown in the graph below, all cause-specific deaths have decreased since 2000, but the primary driver of neonatal mortality remains non-infectious diseases, contrary to popular assumptions that infectious diseases dominate early-life mortality.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+country %>%
+  group_by(year, cause_type) %>%
+  summarise(total_deaths = sum(value_num, na.rm = TRUE)) %>%
+  ggplot(aes(x = year, y = total_deaths, color = cause_type)) +
+  scale_y_continuous(labels = scales::comma) +
+  geom_line(size = 1.2) +
+  labs(x = "Year", y = "Total Deaths", color = "Cause Type") +
+  theme_minimal()
+```
+
+To illustrate this more precisely, the table below compares total deaths by cause type in 2000 and 2021. In 2000, non-infectious causes accounted for over 2.7 million neonatal deaths, while infectious causes contributed fewer than 900,000. By 2021, deaths from non-infectious causes had dropped to approximately 1.68 million, and infectious deaths fell below 420,000.
+
+```{r, echo=FALSE, message=FALSE}
+country %>%
+  filter(year %in% c(2000, 2021)) %>%
+  group_by(year, cause_type) %>%
+  summarise(total_deaths = sum(value_num, na.rm = TRUE)) %>%
+  tidyr::pivot_wider(names_from = year, values_from = total_deaths) %>%
+  knitr::kable(caption = "Cause Type Comparison: 2000 vs 2021")
+```
+
+#### Top 5 Causes of Death in Neonates Over Time
+
+To look more into cause-specific death trends over time, let's look at the top 5 causes over time. The top cause, prematurity, is the leader in cause-specific deaths among neonates worldwide, with over 1.5 million deaths in 2000, and just under 875,000 deaths in 2021. The second-leading cause is birth asphyxia and birth trauma, also a non-infectious cause-specific death. In 2000, there were just over 1 million deaths from this cause, with around 600,000 deaths from this cause in 2021.
+
+Other leading causes have significantly lower rates of death, including congenital anomalies, acute lower respiratory infections, and other Group 1/noncommunicable diseases (what WHO describes as cardiovascular diseases, cancers, chronic respiratory diseases, and diabetes). These causes have significantly lower death counts but remain persistent contributors to neonatal mortality.
+
+```{r, echo=FALSE, message = FALSE, fig.width=10, fig.height=5, out.width="100%"}
+top_causes <- country %>%
+  group_by(cause) %>%
+  summarise(total = sum(value_num, na.rm = TRUE)) %>%
+  slice_max(order_by = total, n = 5) %>%
+  pull(cause)
+
+country %>%
+  filter(cause %in% top_causes) %>%
+  group_by(year, cause) %>%
+  summarise(total_deaths = sum(value_num, na.rm = TRUE)) %>%
+  ggplot(aes(x = year, y = total_deaths, color = cause)) +
+  geom_line(size = 1.2) +
+scale_y_continuous(breaks = seq(0, 2500000, by = 250000), labels = scales::comma) +
+  labs(x = "Year", y = "Total Deaths", color = "Cause") +
+  theme_minimal()
+```
+
+The table below reinforces the visual trend shown in the graph by quantifying the cumulative burden of the top neonatal causes from 2000 to 2021. Prematurity and birth asphyxia/birth trauma stand out as the leading contributors, together accounting for over 41 million deaths. While other causes like congenital anomalies and acute lower respiratory infections contribute fewer deaths, they remain persistent across the two-decade span.
+
+```{r, echo=FALSE}
+top_cause_table <- country %>%
+  group_by(cause) %>%
+  summarise(total_deaths = sum(value_num, na.rm = TRUE)) %>%
+  arrange(desc(total_deaths)) %>%
+  slice_head(n = 10) %>%
+  mutate(total_deaths = comma(total_deaths))
+
+knitr::kable(top_cause_table, caption = "Top 10 Neonatal Causes by Total Deaths (2000–2021)")
+```
+
+\
+Looking at the same data, let's look at a stacked line chart to see how these top 5 causes stack up against each other. Here, we see that prematurity consistently dominates the burden of neonatal mortality across all years, while other causes, especially congenital anomalies and Group 1/noncommunicable diseases, remain relatively stable in their contribution. Infectious causes like acute lower respiratory infections show a modest but steady decline, reinforcing the shift toward non-infectious diseases/etiologies as the primary drivers of neonatal death.
+
+```{r, echo=FALSE, message=FALSE, fig.width=10, fig.height=5, out.width="100%"}
+country %>%
+  filter(cause %in% top_causes) %>%
+  group_by(year, cause) %>%
+  summarise(total_deaths = sum(value_num, na.rm = TRUE)) %>%
+  ggplot(aes(x = year, y = total_deaths, fill = cause)) +
+  geom_area(position = "stack", alpha = 0.8) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(x = "Year", y = "Total Deaths", fill = "Cause") +
+  theme_minimal()
+```
+
+#### Proportion of Neonatal Deaths by Cause Type and Region
+
+This chart shows the distribution of neonatal deaths by cause type across WHO regions. Non-infectious causes dominate in all regions, especially in Europe and the Americas, where they account for nearly 75% of the burden. In contrast, Africa, Eastern Mediterranean, and South-East Asia show a more substantial share of infectious causes.
+
+```{r, echo = FALSE, message = FALSE}
+country %>%
+  group_by(region, cause_type) %>%
+  summarise(total_deaths = sum(value_num, na.rm = TRUE)) %>%
+  group_by(region) %>%
+  mutate(prop = total_deaths / sum(total_deaths)) %>%
+  ungroup() %>%
+  mutate(region = str_to_title(region)) %>%
+  ggplot(aes(x = region, y = prop, fill = cause_type)) +
+  geom_bar(stat = "identity") +
+  labs(x = "WHO Region", y = "Proportion", fill = "Cause Type") +
+  scale_y_continuous(labels = scales::percent) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10)) +
+  scale_fill_manual(values = c("infectious" = "dodgerblue4", "non-infectious" = "red3", "mixed" = "yellow3"))
+```
+
+#### Regional Trends Over Time by Cause Type
+
+In this chart, it is seen that South-East Asia had the highest number of non-infectious deaths in 2000, with around 1 million, while all other regions had fewer than 750,000. Overall though, disease trends have been declining, though, there is one anomaly, specifically with Africa, where there has been an upward trend in non-infectious disease deaths, but the region has seen a steady downward trend in infectious diseases, and a plateau of in mixed-cause deaths.
+
+```{r, echo=FALSE, fig.width=10, fig.height=8, out.width="100%"}
+country %>%
+  group_by(region, year, cause_type) %>%
+  summarise(total_deaths = sum(value_num, na.rm = TRUE), .groups = "drop") %>%
+  mutate(region = str_to_title(region)) %>%
+  ggplot(aes(x = year, y = total_deaths, color = cause_type)) +
+  geom_line(size = 1.1) +
+  facet_wrap(~region, scales = "free_y") +
+  scale_y_continuous(labels = scales::comma) +
+  scale_color_manual(values = c("infectious" = "dodgerblue4", "non-infectious" = "red3", "mixed" = "yellow3")) +
+  labs(x = "Year", y = "Total Deaths", color = "Cause Type") +
+  theme_bw() +
+  theme(axis.text.x = element_text(size = 9))
+```
+
+To look at the numbers closer, the table below breaks down neonatal deaths by cause type across WHO regions in 2000 and 2021. It shows that while most regions experienced declines in both infectious and non-infectious deaths, Africa stands out with a slight increase in non-infectious deaths over time.
+
+In 2021, Africa had the highest number of infectious disease deaths (242,745), followed by Eastern Mediterranean with 70,734 deaths. In the same year, Africa also had the highest number of non-infectious disease deaths with 702,409, followed by South-East Asia with 390,815 deaths.
+
+```{r, echo=FALSE}
+country %>%
+  filter(year %in% c(2000, 2021)) %>%
+  group_by(region, year, cause_type) %>%
+  summarise(total_deaths = sum(value_num, na.rm = TRUE), .groups = "drop") %>%
+  mutate(region = str_to_title(region)) %>%
+  pivot_wider(names_from = year, values_from = total_deaths) %>%
+  mutate(
+    `2000` = scales::comma(`2000`),
+    `2021` = scales::comma(`2021`)
+  ) %>%
+  arrange(region, cause_type) %>%
+  kable(caption = "Regional Neonatal Deaths by Cause Type: 2000 vs 2021")
+```
+
+#### Neonatal Deaths Over Time by Income Group and Cause Type
+
+Income is a powerful determinant of health outcomes, influencing access to care, infrastructure, and the prevalence of preventable conditions. The chart below shows neonatal deaths over time by cause type across four income groups determined by the World Bank: high, upper middle, lower middle, and low income. Across all groups, non-infectious causes consistently account for the largest share of deaths. However, the overall burden and rate of decline vary sharply. Low and middle income countries bear the highest mortality, with infectious deaths remaining substantial in low-income settings, with non-infectious deaths even increasing in this income group. In contrast, high-income countries show both the lowest total deaths and the steepest declines, underscoring the role of systemic investment in maternal and neonatal health.
+
+```{r, echo=FALSE}
+country %>%
+  filter(income != "") %>%
+  group_by(income, year, cause_type) %>%
+  summarise(total_deaths = sum(value_num, na.rm = TRUE), .groups = "drop") %>%
+  ggplot(aes(x = year, y = total_deaths, color = cause_type)) +
+  geom_line(size = 1.1) +
+  facet_wrap(~income, scales = "free_y") +
+  scale_y_continuous(labels = scales::comma) +
+  scale_color_manual(values = c("infectious" = "dodgerblue4", "non-infectious" = "red3", "mixed" = "yellow3")) +
+  labs(x = "Year", y = "Total Deaths", color = "Cause Type") +
+  theme_bw() +
+  theme(axis.text.x = element_text(size = 9))
+```
+
+#### Proportion of Neonatal Deaths by Cause Type and Income Group
+
+In this chart, it can be seen that more than 70% of neonatal deaths are caused by non-infectious diseases in any income group. However, there are some groups, including low income and lower middle income countries, that have a fairly bigger chunk of infectious disease-related deaths compared to any other income group.
+
+```{r, echo=FALSE}
+country %>%
+  filter(income != "") %>%
+  group_by(income, cause_type) %>%
+  summarise(total_deaths = sum(value_num, na.rm = TRUE), .groups = "drop") %>%
+  group_by(income) %>%
+  mutate(prop = total_deaths / sum(total_deaths)) %>%
+  ggplot(aes(x = income, y = prop, fill = cause_type)) +
+  geom_bar(stat = "identity") +
+  scale_y_continuous(labels = scales::percent) +
+  scale_fill_manual(values = c("infectious" = "dodgerblue4", "non-infectious" = "red3", "mixed" = "yellow3")) +
+  labs(x = "Income Group", y = "Proportion", fill = "Cause Type") +
+  theme_bw() +
+  theme(axis.text.x = element_text(size = 10))
+```
+
+#### Top 10 Countries with Total Neonatal Deaths (2020 vs. 2021)
+
+Now that we've seen trends and comparisons by income categorization, it's important to examine how these economic groupings intersect with mortality rates over time. By comparing total neonatal deaths in 2000 and 2021, we can identify which countries bore the greatest burden and how that burden has evolved. Though some countries, like China, Brazil, Tanzania, and Brazil did not have data reported for certain years, it still provides important information. In 2000, India had the highest rate of neonatal deaths, with over 1.5 million. In 2021, it had just under 500,000 deaths total. Following India, Pakistan had about 250,000 deaths in 2021. Some countries have had slight improvements to over neonatal death rates, but India has the highest relative change than any country when it comes to a decrease in neonatal mortality.
+
+```{r, echo=FALSE}
+country %>%
+  filter(year %in% c(2000, 2021)) %>%
+  group_by(country, year) %>%
+  summarise(total_deaths = sum(value_num, na.rm = TRUE), .groups = "drop") %>%
+  group_by(year) %>%
+  slice_max(order_by = total_deaths, n = 10) %>%
+  ggplot(aes(x = total_deaths, y = reorder(country, total_deaths), fill = factor(year))) +
+  geom_col(position = "dodge") +
+  scale_x_continuous(labels = scales::comma) +
+  scale_fill_manual(values = c("2000" = "dodgerblue4", "2021" = "red3")) +
+  labs(x = "Total Deaths", y = "Country", fill = "Year") +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 10))
+```
+
+Let's also visualize this distribution by looking at a map of how neonatal deaths are geographically concentrated across countries with the addition of data from 2010, starting with total deaths. As seen in the maps, India consistently has the highest number of total deaths. As time progresses, Pakistan, Nigeria and other central African countries have increasing rates of neonatal mortality. Conversely, China consistently has fewer deaths in each decade.
+
+```{r, echo=FALSE, fig.height=10}
+get_map_data_total <- function(year) {
+  deaths <- country %>%
+    filter(year == !!year) %>%
+    group_by(country) %>%
+    summarise(total_deaths = sum(value_num, na.rm = TRUE), .groups = "drop") %>%
+    mutate(iso3 = countrycode(country, "country.name", "iso3c"))
+  
+  world <- ne_countries(scale = "medium", returnclass = "sf")
+  
+  left_join(world, deaths, by = c("iso_a3" = "iso3"))
+}
+
+make_map_total <- function(map_data, year_label) {
+  ggplot(map_data) +
+    geom_sf(aes(fill = total_deaths), color = "white", size = 0.1) +
+    scale_fill_gradient(low = "lavender", high = "red", na.value = "gray90", labels = scales::comma) +
+    labs(title = paste("Total Neonatal Deaths in", year_label), fill = "Total Deaths") +
+    theme_bw()
+}
+
+map_data_all <- bind_rows(
+  get_map_data_total(2000) %>% mutate(year = 2000),
+  get_map_data_total(2010) %>% mutate(year = 2010),
+  get_map_data_total(2021) %>% mutate(year = 2021)
+)
+
+ggplot(map_data_all) +
+  geom_sf(aes(fill = total_deaths), color = "white", size = 0.1) +
+  facet_wrap(~year, ncol = 1) +
+  scale_fill_gradient(low = "lavender", high = "red", na.value = "gray90", labels = scales::comma) +
+  labs(fill = "Total Deaths") +
+  theme_bw() +
+  theme(
+    strip.text = element_text(size = 12),
+    panel.spacing = unit(0.1, "lines"),
+    plot.margin = margin(0, 0, 0, 0)
+  )
+```
+
+#### Top 10 Countries with Non-Infectious Disease Neonatal Deaths
+
+As with the previous bar chart, India had the highest rate of neonatal deaths, this time when it came to non-infectious diseases. The "leaderboard" is still relatively the same, with China, Pakistan, Nigeria, and Ethiopia still in the top 5. All countries generally had less neonatal deaths due to non-infectious diseases, however few countries, including Nigeria and the DRC, had an increase from 2000 to 2021.
+
+```{r, echo=FALSE}
+country %>%
+  filter(cause_type == "non-infectious", year %in% c(2000, 2021)) %>%
+  group_by(country, year) %>%
+  summarise(total_deaths = sum(value_num, na.rm = TRUE), .groups = "drop") %>%
+  group_by(year) %>%
+  slice_max(order_by = total_deaths, n = 10) %>%
+  ggplot(aes(x = total_deaths, y = reorder(country, total_deaths), fill = factor(year))) +
+  geom_col(position = "dodge") +
+  scale_x_continuous(labels = scales::comma) +
+  scale_fill_manual(values = c("2000" = "dodgerblue4", "2021" = "red3")) +
+  labs(x = "Total Deaths", y = "Country", fill = "Year") +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 10))
+```
+
+Looking at the maps for better visualization of distribution by country, similar trends from total neonatal deaths apply to this case as well. As time progresses, deaths in India remain the highest. Similarly, in Pakistan and Nigeria, trends in neonatal deaths due to non-infectious disease/etiologies increase with each passing decade. Conversely, China see a decrease in these types of death with each passing decade.
+
+```{r, echo=FALSE, fig.height=10}
+get_map_data_nonid <- function(year) {
+  deaths <- country %>%
+    filter(cause_type == "non-infectious", year == !!year) %>%
+    group_by(country) %>%
+    summarise(total_deaths = sum(value_num, na.rm = TRUE), .groups = "drop") %>%
+    mutate(iso3 = countrycode(country, "country.name", "iso3c"))
+  
+  world <- ne_countries(scale = "medium", returnclass = "sf")
+  
+  left_join(world, deaths, by = c("iso_a3" = "iso3"))
+}
+
+map_data_nonid_all <- bind_rows(
+  get_map_data_nonid(2000) %>% mutate(year = 2000),
+  get_map_data_nonid(2010) %>% mutate(year = 2010),
+  get_map_data_nonid(2020) %>% mutate(year = 2020)
+)
+
+ggplot(map_data_nonid_all) +
+  geom_sf(aes(fill = total_deaths), color = "white", size = 0.1) +
+  facet_wrap(~year, ncol = 1) +
+  scale_fill_gradient(low = "lavender", high = "red", na.value = "gray90", labels = scales::comma) +
+  labs(fill = "Total Deaths") +
+  theme_bw() +
+  theme(
+    strip.text = element_text(size = 12),
+    panel.spacing = unit(0.1, "lines"),
+    plot.margin = margin(0, 0, 0, 0))
+```
+
+#### Top 10 Countries with Infectious Disease Neonatal Deaths
+
+Lastly, the top 10 countries with the highest rates of infectious disease-related neonatal deaths. As with the charts above, the top 5 countries remained the same, with India leading in 2000 with over 250,000 deaths. Generally, countries have had less deaths due to infectious diseases, however, Nigeria and the DRC stand out again with having had the same or higher levels of deaths due to infectious diseases in 2000 compared to 2021.
+
+```{r, echo=FALSE}
+country %>%
+  filter(cause_type == "infectious", year %in% c(2000, 2021)) %>%
+  group_by(country, year) %>%
+  summarise(total_deaths = sum(value_num, na.rm = TRUE), .groups = "drop") %>%
+  group_by(year) %>%
+  slice_max(order_by = total_deaths, n = 10) %>%
+  ggplot(aes(x = total_deaths, y = reorder(country, total_deaths), fill = factor(year))) +
+  geom_col(position = "dodge") +
+  scale_x_continuous(labels = scales::comma) +
+  scale_fill_manual(values = c("2000" = "dodgerblue4", "2021" = "red3")) +
+  labs(x = "Total Deaths", y = "Country", fill = "Year") +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 10))
+```
+
+Again looking at maps to better visualize the death distribution among countries, there are similar patterns, as in the previous maps, but there is a significant change in India's status as the leader in neonatal deaths. As time progresses, especially in 2021, India is no longer the leader in neonatal deaths due to infectious diseases. Instead, Nigeria becomes the leader in these types of deaths. However, there are other trends that remain the same, such as increases in China with fewer neonatal deaths due to this cause in each decade, and Pakistan with higher death rates in the 2010s, but having had a lower rate in 2021.
+
+```{r, echo=FALSE, fig.height=10}
+get_map_data <- function(year) {
+  deaths <- country %>%
+    filter(cause_type == "infectious", year == !!year) %>%
+    group_by(country) %>%
+    summarise(total_deaths = sum(value_num, na.rm = TRUE), .groups = "drop") %>%
+    mutate(iso3 = countrycode(country, "country.name", "iso3c"))
+  
+  world <- ne_countries(scale = "medium", returnclass = "sf")
+  
+  left_join(world, deaths, by = c("iso_a3" = "iso3"))
+}
+
+map_data_all <- bind_rows(
+  get_map_data(2000) %>% mutate(year = 2000),
+  get_map_data(2010) %>% mutate(year = 2010),
+  get_map_data(2020) %>% mutate(year = 2020)
+)
+
+ggplot(map_data_all) +
+  geom_sf(aes(fill = total_deaths), color = "white", size = 0.1) +
+  facet_wrap(~year, ncol = 1) +
+  scale_fill_gradient(low = "lavender", high = "red", na.value = "gray90", labels = scales::comma) +
+  labs(fill = "Total Deaths") +
+  theme_bw() +
+  theme(
+    strip.text = element_text(size = 12),
+    panel.spacing = unit(0.1, "lines"),
+    plot.margin = margin(0, 0, 0, 0))
+```
+
+#### Overall Top 5 Neonatal Deaths due to Non-infectious Diseases by Region
+
+Now, let's zoom out to see a breakdown of the top 5 non-infectious diseases and their prevalence in each region. Overall, in South-East Asia and Africa, there were nearly 8 million deaths due to prematurity, while in Eastern Mediterranean there were over 4 million. Europe had the lowest rate of deaths due to prematurity, with just over 600,000. This was all between 2000 and 2021.
+
+```{r, echo=FALSE, fig.width=14, fig.height=10, out.width="100%"}
+top_noninfectious <- country %>%
+  filter(cause_type == "non-infectious") %>%
+  group_by(cause) %>%
+  summarise(total_deaths = sum(value_num, na.rm = TRUE), .groups = "drop") %>%
+  slice_max(order_by = total_deaths, n = 5) %>%
+  pull(cause)
+
+country %>%
+  filter(cause %in% top_noninfectious, cause_type == "non-infectious") %>%
+  mutate(region = str_to_title(region)) %>%
+  group_by(region, cause) %>%
+  summarise(total_deaths = sum(value_num, na.rm = TRUE), .groups = "drop") %>%
+  ggplot(aes(x = total_deaths, y = reorder(cause, total_deaths), fill = cause)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~region, scales = "free_x", ncol = 2) +
+  scale_x_continuous(labels = scales::comma) +
+  labs(x = "Total Deaths", y = "Cause") +
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 14),
+    strip.text = element_text(size = 14),
+    panel.spacing = unit(0.5, "lines"),
+    plot.margin = margin(10, 10, 10, 10))
+```
+
+#### Overall Top 5 Neonatal Deaths due to Infectious Diseases by Region
+
+Similarly to the trends above, South-East Asia and Africa have the highest rates of deaths due to acute lower respiratory infections, sepsis, and diarrheal diseases. Generally, in each region, the leading cause of death is due to acute lower respiratory infections, however, in the Americas, there is a substantial difference, with more than double the deaths due to sepsis, compared to respiratory infections. Similarly, in Europe, there were more deaths due to sepsis than due to respiratory infections.
+
+```{r, echo=FALSE, fig.width=9, fig.height=7, out.width="100%"}
+top_infectious <- country %>%
+  filter(cause_type == "infectious") %>%
+  group_by(cause) %>%
+  summarise(total_deaths = sum(value_num, na.rm = TRUE), .groups = "drop") %>%
+  slice_max(order_by = total_deaths, n = 5) %>%
+  pull(cause)
+
+country %>%
+  filter(cause %in% top_infectious, cause_type == "infectious") %>%
+  mutate(region = stringr::str_to_title(region)) %>%
+  group_by(region, cause) %>%
+  summarise(total_deaths = sum(value_num, na.rm = TRUE), .groups = "drop") %>%
+  ggplot(aes(x = total_deaths, y = reorder(cause, total_deaths), fill = cause)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~region, scales = "free_x", ncol = 2) +
+  scale_x_continuous(labels = scales::comma) +
+  labs(x = "Total Deaths", y = "Cause") +
+  theme_bw()
+```
+
+#### Overall Infectious vs. Non-infectious Neonatal Deaths by Region
+
+Looking at this comparison of the two above faceted plots, it is apparent that non-infectious diseases are by far the largest leading cause of death in neonates across all regions. The difference lies in the proportion of deaths had in each region. It is also important to take into consideration the number of deaths due to infectious diseases. For example, Africa has more deaths due to infectious diseases than all neonatal deaths in Europe combined. Even then, deaths due to infectious diseases in Africa account for only a quarter of all neonatal deaths.
+
+```{r, echo=FALSE}
+country %>%
+  filter(cause_type %in% c("infectious", "non-infectious")) %>%
+  mutate(region = str_to_title(region)) %>%
+  group_by(region, cause_type) %>%
+  summarise(total_deaths = sum(value_num, na.rm = TRUE), .groups = "drop") %>%
+  ggplot(aes(x = total_deaths, y = reorder(region, total_deaths), fill = cause_type)) +
+  geom_col(position = "dodge") +
+  scale_x_continuous(labels = scales::comma) +
+  scale_fill_manual(values = c("infectious" = "dodgerblue4", "non-infectious" = "red3")) +
+  labs(x = "Total Deaths", y = "WHO Region", fill = "Cause Type") +
+  theme_bw()
+```
+
+#### Top Country in Each WHO Region with the Highest Count of Neonatal Deaths
+
+Now that we've seen trends in regions, let's zoom into the single country in each WHO region with the highest total neonatal deaths in 2021. India and Nigeria not only lead their respective regions in total neonatal deaths, but also show how non-infectious causes consistently outweigh infectious ones. Yet even within this imbalance, the infectious burden remains substantial: Nigeria’s infectious neonatal deaths alone exceed the total neonatal deaths in all of Europe.
+
+```{r, echo=FALSE}
+top_total <- country %>%
+  filter(year == 2021, !is.na(region), !is.na(country)) %>%
+  group_by(region, country) %>%
+  summarise(total_deaths = sum(value_num, na.rm = TRUE), .groups = "drop") %>%
+  group_by(region) %>%
+  slice_max(order_by = total_deaths, n = 1)
+
+breakdown <- country %>%
+  filter(year == 2021, !is.na(region), !is.na(country)) %>%
+  semi_join(top_total, by = c("region", "country")) %>%
+  group_by(region, country, cause_type) %>%
+  summarise(deaths = sum(value_num, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = cause_type, values_from = deaths, values_fill = 0)
+
+final_table <- top_total %>%
+  left_join(breakdown, by = c("region", "country")) %>%
+  mutate(region = str_to_title(region)) %>%
+  left_join(
+    country %>% select(country, income) %>% distinct(),
+    by = "country"
+  ) %>%
+  select(
+    Region = region,
+    Country = country,
+    Income = income,
+    `Total Neonatal Deaths` = total_deaths,
+    `Infectious Deaths` = infectious,
+    `Non-Infectious Deaths` = `non-infectious`
+  ) %>%
+  arrange(desc(`Total Neonatal Deaths`))
+
+kable(final_table, align = "l")
+```
+
+\
+
+------------------------------------------------------------------------
+
+### Conclusion
+
+As a reminder, this is the central question:
+
+::: {.callout-note appearance="minimal"}
+**To what extent do patterns of neonatal mortality differ across WHO regions, particularly in the dominance of infectious versus non-infectious causes?**
+:::
+
+The data reveals clear regional and temporal patterns in neonatal mortality. Non-infectious causes consistently account for the highest number of neonatal deaths across all regions, with particularly high burdens in South-East Asia and Africa. Infectious causes, while lower overall, remain significant in low-income regions and show modest declines over time. From 2000 to 2021, total neonatal deaths have decreased globally, but disparities persist, especially in countries like India and Nigeria, which consistently rank among the highest in absolute mortality.
+
+Patterns of neonatal mortality differ substantially across WHO regions, especially in the dominance of infectious versus non-infectious causes. In regions such as Africa and South-East Asia, infectious causes remain disproportionately high, reflecting persistent gaps in access to preventive care and early treatment. In contrast, regions like Europe and the Americas show a clear dominance of non-infectious causes, often linked to prematurity and congenital conditions. These divergences highlight the need for region-specific strategies: infectious disease control remains critical in lower-income settings, while non-infectious mortality demands continued investment in neonatal care and maternal health systems.

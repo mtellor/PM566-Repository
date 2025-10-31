@@ -1,0 +1,126 @@
+---
+title: "Lab 8"
+author: "Mark Tello-Rincon"
+format: html
+editor: visual
+embed-resources: true
+theme: Darkly
+---
+
+#### Set-up
+
+```{r}
+library(parallel)
+library(microbenchmark)
+```
+
+###  Question 1
+
+```{r}
+fun1 <- function(n = 100, k = 4, lambda = 4) {
+  x <- NULL
+  
+  for (i in 1:n){
+    x <- rbind(x, rpois(k, lambda))    
+  }
+  
+  return(x)
+}
+
+fun1alt <- function(n = 100, k = 4, lambda = 4) {
+  matrix(rpois(n * k, lambda), nrow = n, ncol = k)
+}
+
+
+set.seed(123)
+dim_check <- all(dim(fun1()) == dim(fun1alt()))
+dist_check <- abs(mean(fun1()) - mean(fun1alt())) < 0.1
+
+
+# Benchmarking
+microbenchmark::microbenchmark(
+  fun1(),
+  fun1alt()
+)
+```
+
+###  Question 2
+
+```{r}
+# Data Generating Process (10 x 10,000 matrix)
+set.seed(1234)
+x <- matrix(rnorm(1e4), nrow=10)
+
+# Find each column's max value
+fun2 <- function(x) {
+  apply(x, 2, max)
+}
+
+fun2alt <- function(x) {
+  vapply(seq_len(ncol(x)), function(i) max(x[, i]), numeric(1))
+}
+
+# Output check
+output_check <- all(fun2(x) == fun2alt(x))
+
+# Benchmarking
+microbenchmark::microbenchmark(
+  fun2(x),
+  fun2alt(x)
+)
+```
+
+###  Question 3
+
+#### Part 1
+
+```{r}
+my_boot <- function(dat, stat, R, ncpus = 1L) {
+  # Generate bootstrap indices
+  n <- nrow(dat)
+  idx <- matrix(sample.int(n, n * R, TRUE), nrow = n, ncol = R)
+  
+  # Set up parallel backend
+  cl <- makeCluster(ncpus)
+  clusterExport(cl, varlist = c("dat", "stat", "idx"), envir = environment())
+  
+  # Parallel loop
+  ans <- parLapply(cl, seq_len(R), function(i) {
+    stat(dat[idx[, i], , drop = FALSE])
+  })
+  
+  stopCluster(cl)
+  
+  # Combine results
+  ans <- do.call(rbind, ans)
+  return(ans)
+}
+```
+
+####  Part 2
+
+```{r}
+# Bootstrap of an OLS
+my_stat <- function(d) coef(lm(y ~ x, data=d))
+
+# DATA SIM
+set.seed(1)
+n <- 500; R <- 1e4
+
+x <- cbind(rnorm(n)); y <- x*5 + rnorm(n)
+
+# Checking if we get something similar as lm
+ans0 <- confint(lm(y~x))
+ans1 <- my_boot(dat = data.frame(x, y), my_stat, R = R, ncpus = 2L)
+
+t(apply(ans1, 2, quantile, c(.025,.975)))
+
+ans0
+```
+
+####  Part 3
+
+```{r}
+system.time(my_boot(dat = data.frame(x, y), my_stat, R = 4000, ncpus = 1L))
+system.time(my_boot(dat = data.frame(x, y), my_stat, R = 4000, ncpus = 2L))
+```

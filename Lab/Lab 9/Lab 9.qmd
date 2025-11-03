@@ -1,0 +1,353 @@
+---
+title: "Lab 9"
+author: "Mark Tello-Rincon"
+format:
+  html:
+    theme: darkly
+    toc: true
+    toc-location: right
+    toc-depth: 4
+    toc-title: "Contents"
+editor: visual
+embed-resources: true
+---
+
+#### Set-up
+
+```{r, include=FALSE}
+library(knitr)
+```
+
+```{r}
+library(RSQLite)
+library(DBI)
+
+# Initialize a temporary in memory database
+con <- dbConnect(SQLite(), ":memory:")
+
+# Download tables
+actor <- read.csv("https://raw.githubusercontent.com/ivanceras/sakila/master/csv-sakila-db/actor.csv")
+rental <- read.csv("https://raw.githubusercontent.com/ivanceras/sakila/master/csv-sakila-db/rental.csv")
+customer <- read.csv("https://raw.githubusercontent.com/ivanceras/sakila/master/csv-sakila-db/customer.csv")
+payment <- read.csv("https://raw.githubusercontent.com/ivanceras/sakila/master/csv-sakila-db/payment_p2007_01.csv")
+
+# Copy data.frames to database
+dbWriteTable(con, "actor", actor)
+dbWriteTable(con, "rental", rental)
+dbWriteTable(con, "customer", customer)
+dbWriteTable(con, "payment", payment)
+```
+
+``` sql
+dbListTables(con)
+```
+
+```{r, echo=FALSE}
+kable(
+  data.frame(table_name = dbListTables(con)),
+  caption = "List of Tables in the Database",
+  align = "c"
+)
+```
+
+``` sql
+PRAGMA table_info(actor)
+```
+
+```{r, echo=FALSE}
+kable(
+  dbGetQuery(con, "PRAGMA table_info(actor)"),
+  caption = "Structure of the 'actor' Table",
+  align = "c"
+)
+```
+
+### Exercise 1
+
+``` sql
+SELECT actor_id, first_name, last_name
+FROM actor
+ORDER BY last_name, first_name
+```
+
+```{r, echo=FALSE}
+kable(head(dbGetQuery(con, "
+    SELECT actor_id, first_name, last_name
+    FROM actor
+    ORDER BY last_name, first_name
+  "), 10),
+  caption = "First 10 Actors Ordered by Last and First Name",
+  align = "c")
+```
+
+### Exercise 2
+
+``` sql
+SELECT actor_id, first_name, last_name
+FROM actor
+WHERE last_name IN ('WILLIAMS', 'DAVIS')
+```
+
+```{r, echo=FALSE}
+kable(dbGetQuery(con, "
+  SELECT actor_id, first_name, last_name
+  FROM actor
+  WHERE last_name IN ('WILLIAMS', 'DAVIS')"))
+```
+
+### Exercise 3
+
+``` sql
+SELECT DISTINCT customer_id
+FROM rental
+WHERE date(rental_date) = '2005-07-05'
+```
+
+```{r, echo=FALSE}
+kable(head(dbGetQuery(con, "
+    SELECT DISTINCT customer_id
+    FROM rental
+    WHERE date(rental_date) = '2005-07-05'
+  "), 10),
+  caption = "First 10 Customers Who Rented on July 5, 2005",
+  align = "c")
+```
+
+### Exercise 4.1
+
+``` sql
+SELECT *
+FROM payment
+WHERE amount IN (1.99, 7.99, 9.99)
+```
+
+```{r, echo=FALSE}
+kable(head(dbGetQuery(con, "
+    SELECT *
+    FROM payment
+    WHERE amount IN (1.99, 7.99, 9.99)
+  "), 10),
+  caption = "First 10 Payments with Amounts 1.99, 7.99, or 9.99",
+  align = "c")
+```
+
+### Exercise 4.2
+
+``` sql
+SELECT *
+FROM payment
+WHERE amount > 5
+```
+
+```{r, echo=FALSE}
+kable(head(dbGetQuery(con, "
+    SELECT *
+    FROM payment
+    WHERE amount > 5
+  "), 10),
+  caption = "First 10 Payments Greater Than $5",
+  align = "c")
+```
+
+### Exercise 4.3
+
+``` sql
+SELECT *
+FROM payment
+WHERE amount >5  AND amount <8
+```
+
+```{r}
+kable(head(dbGetQuery(con, "
+    SELECT *
+    FROM payment
+    WHERE amount > 5 AND amount < 8
+  "), 10),
+  caption = "First 10 Payments Between $5 and $8",
+  align = "c")
+```
+
+### Exercise 5
+
+``` sql
+SELECT payment.payment_id, payment.amount
+FROM payment
+  INNER JOIN customer ON payment.customer_id = customer.customer_id
+WHERE customer.last_name = 'DAVIS'
+```
+
+```{r, echo=FALSE}
+kable(head(dbGetQuery(con, "
+    SELECT payment.payment_id, payment.amount
+    FROM payment
+    INNER JOIN customer ON payment.customer_id = customer.customer_id
+    WHERE customer.last_name = 'DAVIS'
+  "), 10),
+  caption = "Payments Made by Customer Last Name DAVIS",
+  align = "c")
+```
+
+### Exercise 6.1
+
+``` sql
+SELECT COUNT(*)
+FROM rental
+```
+
+```{r, echo=FALSE}
+kable(dbGetQuery(con, "
+    SELECT COUNT(*)
+    FROM rental
+  "),
+  caption = "Total Number of Rentals",
+  align = "c")
+```
+
+### Exercise 6.2
+
+``` sql
+SELECT customer_id, COUNT(*) AS rental_count
+FROM rental
+GROUP BY customer_id
+```
+
+```{r, echo=FALSE}
+kable(head(dbGetQuery(con, "
+    SELECT customer_id, COUNT(*) AS rental_count
+    FROM rental
+    GROUP BY customer_id
+  "), 10),
+  caption = "First 10 Customers with Rental Counts",
+  align = "c")
+```
+
+### Exercise 6.3
+
+``` sql
+SELECT customer_id, COUNT(*) AS rental_count
+FROM rental
+GROUP BY customer_id
+ORDER BY rental_count DESC
+```
+
+```{r, echo=FALSE}
+kable(head(dbGetQuery(con, "
+    SELECT customer_id, COUNT(*) AS rental_count
+    FROM rental
+    GROUP BY customer_id
+    ORDER BY rental_count DESC
+  "), 10),
+  caption = "Top 10 Customers by Rental Count",
+  align = "c")
+```
+
+### Exercise 6.4
+
+``` sql
+SELECT customer_id, COUNT(*) AS rental_count
+FROM rental
+GROUP BY customer_id
+HAVING COUNT(*) >= 40
+ORDER BY rental_count DESC
+```
+
+```{r, echo=FALSE}
+kable(head(dbGetQuery(con, "
+    SELECT customer_id, COUNT(*) AS rental_count
+    FROM rental
+    GROUP BY customer_id
+    HAVING COUNT(*) >= 40
+    ORDER BY rental_count DESC
+  "), 10),
+  caption = "Top Customers with 40 or More Rentals",
+  align = "c")
+```
+
+### Exercise 7.0
+
+``` sql
+SELECT 
+  MAX(amount) AS max_amount,
+  MIN(amount) AS min_amount,
+  AVG(amount) AS avg_amount,
+  SUM(amount) AS sum_amount
+FROM payment
+```
+
+```{r, echo=FALSE}
+kable(dbGetQuery(con, "
+    SELECT 
+      MAX(amount) AS max_amount,
+      MIN(amount) AS min_amount,
+      AVG(amount) AS avg_amount,
+      SUM(amount) AS sum_amount
+    FROM payment
+  "),
+  caption = "Summary Statistics for Payment Amounts",
+  align = "c")
+```
+
+### Exercise 7.1
+
+``` sql
+SELECT 
+  customer_id,
+  MAX(amount) AS max_amount,
+  MIN(amount) AS min_amount,
+  AVG(amount) AS avg_amount,
+  SUM(amount) AS total_amount
+FROM payment
+GROUP BY customer_id
+```
+
+```{r, echo=FALSE}
+kable(head(dbGetQuery(con, "
+    SELECT 
+      customer_id,
+      MAX(amount) AS max_amount,
+      MIN(amount) AS min_amount,
+      AVG(amount) AS avg_amount,
+      SUM(amount) AS total_amount
+    FROM payment
+    GROUP BY customer_id
+  "), 10),
+  caption = "First 10 Customers: Summary Statistics of Payments",
+  align = "c")
+```
+
+### Exercise 7.2
+
+``` sql
+SELECT 
+  customer_id,
+  MAX(amount) AS max_amount,
+  MIN(amount) AS min_amount,
+  AVG(amount) AS avg_amount,
+  SUM(amount) AS total_amount
+FROM payment
+GROUP BY customer_id
+HAVING COUNT(*) > 5
+```
+
+```{r, echo=FALSE}
+kable(head(dbGetQuery(con, "
+    SELECT 
+      customer_id,
+      MAX(amount) AS max_amount,
+      MIN(amount) AS min_amount,
+      AVG(amount) AS avg_amount,
+      SUM(amount) AS total_amount
+    FROM payment
+    GROUP BY customer_id
+    HAVING COUNT(*) > 5
+  "), 10),
+  caption = "First 10 Customers with More Than 5 Payments: Summary Statistics",
+  align = "c")
+```
+
+\
+
+```{r}
+# clean up
+dbDisconnect(con)
+```

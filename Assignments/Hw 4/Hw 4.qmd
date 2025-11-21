@@ -1,0 +1,180 @@
+---
+title: "Homework 4"
+author: "Mark Tello-Rincon"
+format: html
+editor: visual
+embed-resources: true
+theme: darkly
+---
+
+##### HPC
+
+```{r}
+# Total for each row
+fun1 <- function(mat) {
+  n <- nrow(mat)
+  ans <- double(n) 
+  for (i in 1:n) {
+    ans[i] <- sum(mat[i, ])
+  }
+  ans
+}
+
+fun1alt <- function(mat) {
+  rowSums(mat)
+}
+
+# running cumulative sum by row
+fun2 <- function(mat) {
+  n <- nrow(mat)
+  k <- ncol(mat)
+  ans <- mat
+  for (i in 1:n) {
+    for (j in 2:k) {
+      ans[i,j] <- mat[i, j] + ans[i, j - 1]
+    }
+  }
+  ans
+}
+
+fun2alt <- function(mat) {
+  t(apply(mat, 1, cumsum))
+}
+```
+
+###  Question 1
+
+-   The optimized functions produced identical outputs to the originals
+-   The `rowSums()` version of `fun1` ran about 30 times faster than the loop
+-   The `apply(cumsum)` version of `fun2` was about 5 times faster
+-   Vectorization significantly improves performance/speed without changing the results
+
+```{r, warning=FALSE}
+# Use the data with this code
+set.seed(2315)
+dat <- matrix(rnorm(200 * 100), nrow = 200)
+
+# Test for the first
+microbenchmark::microbenchmark(
+  fun1(dat),
+  fun1alt(dat), unit = "relative"
+)
+
+# Test for the second
+microbenchmark::microbenchmark(
+  fun2(dat),
+  fun2alt(dat), unit = "relative"
+)
+
+# Estimate pi thru sim
+sim_pi <- function(n = 1000, i = NULL) {
+  p <- matrix(runif(n*2), ncol = 2)
+  mean(rowSums(p^2) < 1) * 4
+}
+
+# Example of the run
+set.seed(156)
+sim_pi(1000) # 3.132
+
+# This runs the simulation a 4,000 times, each with 10,000 points
+set.seed(1231)
+system.time({
+  ans <- unlist(lapply(1:4000, sim_pi, n = 10000))
+  print(mean(ans))
+})
+```
+
+###  Question 2
+
+-   `parLapply()` produced roughly the same estimate of pi and was 2 times faster
+
+```{r, echo = FALSE}
+library(parallel)
+```
+
+```{r}
+cl <- makeCluster(4)
+
+clusterExport(cl, varlist = c("sim_pi"), envir = environment())
+
+clusterSetRNGStream(cl, 1231)
+
+system.time({
+  ans <- unlist(parLapply(cl, 1:4000, function(i) sim_pi(n = 10000)))
+  print(mean(ans))
+})
+
+stopCluster(cl)
+```
+
+##### SQL
+
+```{r}
+library(RSQLite)
+library(DBI)
+
+# Initialize a temporary in memory database
+con <- dbConnect(SQLite(), ":memory:")
+
+# Download tables
+film <- read.csv("https://raw.githubusercontent.com/ivanceras/sakila/master/csv-sakila-db/film.csv")
+film_category <- read.csv("https://raw.githubusercontent.com/ivanceras/sakila/master/csv-sakila-db/film_category.csv")
+category <- read.csv("https://raw.githubusercontent.com/ivanceras/sakila/master/csv-sakila-db/category.csv")
+
+# Copy data.frames to database
+dbWriteTable(con, "film", film)
+dbWriteTable(con, "film_category", film_category)
+dbWriteTable(con, "category", category)
+```
+
+###  Question 3
+
+-   There are 5 rating categories in the dataset
+-   PG‑13 has the largest number of movies with 223
+-   Rated R movies had the least with 195
+
+```{sql connection=con}
+SELECT rating, COUNT(*) AS num_movies
+FROM film
+GROUP BY rating;
+```
+
+###  Question 4
+
+-   PG films have the lowest average replacement cost at about 18.96
+-   PG‑13 films have the highest at about 20.40
+-   Rental rates are all close to 3, with PG films having the highest average rental rate at 3.05
+
+```{sql connection=con}
+SELECT rating,
+       AVG(replacement_cost) AS avg_replacement_cost,
+       AVG(rental_rate) AS avg_rental_rate
+FROM film
+GROUP BY rating;
+```
+
+###  Question 5
+
+-   Category 9 has the most among the first ten shown with 73 films
+-   Category 4 has the least with 57 films
+
+```{sql connection=con}
+SELECT fc.category_id, COUNT(*) AS num_films
+FROM film_category fc
+INNER JOIN film f ON f.film_id = fc.film_id
+GROUP BY fc.category_id;
+```
+
+###  Question 6
+
+-   `Sports` is the most popular category with 74 films
+
+```{sql connection=con}
+SELECT c.name, COUNT(*) AS num_films
+FROM film_category fc
+INNER JOIN film f ON f.film_id = fc.film_id
+INNER JOIN category c ON c.category_id = fc.category_id
+GROUP BY c.name
+ORDER BY num_films DESC
+LIMIT 1;
+```

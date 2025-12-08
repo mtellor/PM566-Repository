@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Data Processing</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="data_files/libs/clipboard/clipboard.min.js"></script>
+<script src="data_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="data_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="data_files/libs/quarto-html/popper.min.js"></script>
+<script src="data_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="data_files/libs/quarto-html/anchor.min.js"></script>
+<link href="data_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="data_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="data_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="data_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="data_files/libs/bootstrap/bootstrap-81267100e462c21b3d6c0d5bf76a3417.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="data_files/libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="data_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="data_files/libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="data_files/libs/leaflet-1.3.1/leaflet.css" rel="stylesheet">
+<script src="data_files/libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="data_files/libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
+<script src="data_files/libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="data_files/libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="data_files/libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
+<script src="data_files/libs/leaflet-binding-2.2.3/leaflet.js"></script>
+<script src="data_files/libs/leaflet-providers-2.0.0/leaflet-providers_2.0.0.js"></script>
+<script src="data_files/libs/leaflet-providers-plugin-2.2.3/leaflet-providers-plugin.js"></script>
+<link href="data_files/libs/leaflet-awesomemarkers-2.0.3/leaflet.awesome-markers.css" rel="stylesheet">
+<script src="data_files/libs/leaflet-awesomemarkers-2.0.3/leaflet.awesome-markers.min.js"></script>
+<script src="data_files/libs/plotly-binding-4.11.0/plotly.js"></script>
+<script src="data_files/libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="data_files/libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="data_files/libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="data_files/libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="data_files/libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Data Processing</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="set-up" class="level3">
+<h3 class="anchored" data-anchor-id="set-up">Set-up</h3>
+<p>The following packages were installed:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(leaflet)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="source" class="level3">
+<h3 class="anchored" data-anchor-id="source">Source</h3>
+<p>Data was downloaded from the <a href="https://data.chhs.ca.gov/dataset/hospital-emergency-department-characteristics-by-facility-pivot-profile"><strong>2024 Emergency Department Pivot Profile</strong></a> published by the California Department of Health Care Access and Information. Data was in CSV format.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ed <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"~/Library/CloudStorage/GoogleDrive-tellorin@usc.edu/.shortcut-targets-by-id/10yI1Vp2x44iBX7T-_NfWNeL7go8kwnUH/2. College - USC/1. Degree/1. Courses/Y4 Senior/Fall 2025/PM 566/PM566-Repository/Assignments/Final/data/data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="preliminary-eda" class="level3">
+<h3 class="anchored" data-anchor-id="preliminary-eda">Preliminary EDA</h3>
+<p>Before cleaning and analysis, basic exploratory checks were performed to confirm the dataset’s structure and contents:</p>
+<ul>
+<li>Dimensions (<code>dim()</code>): Verified the number of rows and columns to ensure the dataset matched expectations from the published profile. This confirmed that each hospital record was present and that the dataset contained the full set of variables.</li>
+<li>Column names (<code>names()</code>): Inspected the first ten variable names to get a sense of the schema. This helped identify long or complex names (e.g., <code>disp_against_medical_advice</code>) that would later be simplified for easier coding.</li>
+<li>Structure (<code>str()</code>): Checked variable types (numeric vs.&nbsp;character) and lengths. This step confirmed that disposition counts, payer counts, and diagnosis counts were stored as numeric values, while facility identifiers were character strings.</li>
+<li>Preview (<code>head()</code>): Displayed the first few rows to visually confirm that the data loaded correctly and that values aligned with the expected hospitals.</li>
+</ul>
+<p>These preliminary checks ensured that the dataset was complete, properly structured, and ready for cleaning. They also provided an early look at variable groupings (dispositions, payers, diagnoses, demographics), which guided the decision to collapse categories and normalize counts into proportions for cross‑hospital comparisons.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># EDA 1 &amp; 2 ----</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(ed)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(ed)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># EDA 3 &amp; 4 ----</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># structure</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(ed)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(ed)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ed)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="cleaning" class="level3">
+<h3 class="anchored" data-anchor-id="cleaning">Cleaning</h3>
+<p>To prepare the dataset for analysis, several cleaning steps were performed to ensure consistency, accuracy, and relevance:</p>
+<ul>
+<li>Handling missing values
+<ul>
+<li>All numeric fields with missing values were replaced with <code>0</code> to avoid skewing totals.</li>
+<li>Character fields with missing values were dropped, since they indicated variables not applicable to the selected hospitals.</li>
+</ul></li>
+<li>Checking for invalid entries
+<ul>
+<li>Numeric variables were scanned for negative values, which would be invalid in count data. None were found.</li>
+</ul></li>
+<li>Variable selection
+<ul>
+<li>From the full dataset, only relevant variables were retained, including:
+<ul>
+<li>Facility identifiers (name, city, zip code, latitude/longitude)</li>
+<li>Capacity measures (licensed inpatient beds, ED treatment stations)</li>
+<li>Disposition categories (routine discharge, AMA, psychiatric transfer, SNF, death, etc.)</li>
+<li>Demographics (age groups, sex, race/ethnicity, language)</li>
+<li>Payer categories (Medi‑Cal, Medicare, private insurance, uninsured, other)</li>
+<li>Diagnosis categories (circulatory, respiratory, injury/trauma, mental health, other)</li>
+</ul></li>
+</ul></li>
+<li>Standardizing variable names
+<ul>
+<li>Long or complex names were simplified and converted to lowercase for easier coding (e.g., <code>disp_against_medical_advice</code> → <code>disp_ama</code>).</li>
+<li>This step improved readability and consistency across the analysis.</li>
+</ul></li>
+<li>Dropping unused variables
+<ul>
+<li>Certain disposition categories not relevant to the analysis (e.g., disaster care site, rehab, CAH transfers) were removed to reduce noise.</li>
+</ul></li>
+<li>Creating the slim dataset (<code>ed_slim</code>)
+<ul>
+<li>The cleaned and standardized dataset was saved as <code>ed_slim</code>.</li>
+<li>This version contained only the variables needed for comparative analysis across the three PIH Health hospitals.</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(ed))</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>ed_clean <span class="ot">&lt;-</span> ed <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="sc">~</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(.), <span class="dv">0</span>, .)))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(ed_clean))</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>numeric_vars <span class="ot">&lt;-</span> <span class="fu">sapply</span>(ed_clean, is.numeric)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(ed_clean[, numeric_vars] <span class="sc">&lt;</span> <span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(ed)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>ed_slim <span class="ot">&lt;-</span> ed_clean <span class="sc">%&gt;%</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    lat, long, FACILITY_NAME, DBA_CITY, DBA_ZIP_CODE,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    LICENSED_BED_SIZE, SENATE_DISTRICT_DESC, ASSEMBLY_DISTRICT_DESC,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    MSSA_NAME, MSSA_DESIGNATION,</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Dispositions</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    disp_Acute_Care, disp_Against_Medical_Advice, disp_Childrens_or_Cancer,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    disp_Died, disp_Home_Health_Service, disp_Not_Defined_Elsewhere,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    disp_Prison_Jail, disp_Psychiatric_Care, disp_Routine, disp_SN_IC_Care,</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    disp_Hospice_Care, disp_Residential_Care, disp_CAH, disp_Rehab,</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    disp_Other, disp_Disaster_Care_Site,</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Zip categories</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    Zip_CA_Resident, Zip_Homeless, Zip_Out_of_State, Zip_Unknown, Zip_Foreign,</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Sex</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    Sex_Female, Sex_Male, Sex_Other_Unknown,</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Age</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    Age_0_09, Age_10_19, Age_20_29, Age_30_39, Age_40_49,</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    Age_50_59, Age_60_69, Age_70_79, Age_80_,</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Payer</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    Payer_All_Other_Payers, Payer_MediCal, Payer_Medicare,</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    Payer_Other_Government, Payer_Other_Unknown,</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    Payer_Private_Health_Insurance, Payer_Self_Pay_or_Uninsured,</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Race/Ethnicity</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    racegrp_aman, racegrp_asian, racegrp_black, racegrp_multirace,</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    racegrp_nhpi, racegrp_other, racegrp_unknown, racegrp_white,</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    eth_Hispanic, eth_NonHispanic, eth_Other_Unknown,</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Language</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    All_Other_Languages, English, Spanish,</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Diagnosis groups</span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>    dx_Circulatory, dx_Congenital, dx_Digestive, dx_Diseases_of_the_Blood,</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>    dx_Ear, dx_Endocrine, dx_Eye, dx_Factors_Influencing_Health,</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>    dx_Genitourinary, dx_Infectious, dx_Injury_Poisoning, dx_MentalHealth,</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>    dx_Musculoskeletal, dx_Neoplasms, dx_Nervous_System, dx_Other_Unknown,</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>    dx_Pregnancy_Childbirth, dx_Respiratory, dx_Skin, dx_Symptoms_Signs_NEC,</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>    dx_Certain_Perinatal_Conditions,</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Emergency treatment stations</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>    EMER_MED_TREAT_STATIONS)</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(ed_slim)</span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(ed_slim)</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ed_slim)</span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>ed_slim <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>()</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(ed_slim)</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>ed_slim <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">facility =</span> facility_name,</span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">city =</span> dba_city,</span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>    <span class="at">zip =</span> dba_zip_code,</span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>    <span class="at">ipt_beds =</span> licensed_bed_size,</span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>    <span class="at">disp_ama =</span> disp_against_medical_advice,</span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>    <span class="at">disp_routine =</span> disp_routine,</span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>    <span class="at">disp_acute =</span> disp_acute_care,</span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>    <span class="at">disp_psych =</span> disp_psychiatric_care,</span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>    <span class="at">disp_snf =</span> disp_sn_ic_care,</span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>    <span class="at">disp_death =</span> disp_died,</span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>    <span class="at">payer_medical =</span> payer_medi_cal,</span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>    <span class="at">payer_medicare =</span> payer_medicare,</span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>    <span class="at">payer_private =</span> payer_private_health_insurance,</span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>    <span class="at">payer_uninsured =</span> payer_self_pay_or_uninsured,</span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>    <span class="at">dx_injury =</span> dx_injury_poisoning,</span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>    <span class="at">dx_mental =</span> dx_mental_health,</span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>    <span class="at">dx_resp =</span> dx_respiratory,</span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>    <span class="at">dx_cardio =</span> dx_circulatory,</span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>    <span class="at">dx_sx =</span> dx_symptoms_signs_nec,</span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>    <span class="at">dx_gu =</span> dx_genitourinary,</span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>    <span class="at">dx_gi =</span> dx_digestive,</span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>    <span class="at">dx_ortho =</span> dx_musculoskeletal,</span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>    <span class="at">dx_nervous =</span> dx_nervous_system,</span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>    <span class="at">dx_ob =</span> dx_pregnancy_childbirth,</span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>    <span class="at">dx_nicu =</span> dx_certain_perinatal_conditions,</span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a>    <span class="at">ed_beds =</span> emer_med_treat_stations)</span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(ed_slim)</span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>ed_slim <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>disp_cah, <span class="sc">-</span>disp_rehab, <span class="sc">-</span>disp_disaster_care_site)</span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(ed_slim)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exploratory-plots-visualizations" class="level3">
+<h3 class="anchored" data-anchor-id="exploratory-plots-visualizations">Exploratory plots &amp; visualizations</h3>
+<p>The following plots and visualizations were generated during the EDA process. Some plots were included in the main report, while others were used purely for visualization during EDA.</p>
+<section id="location-of-hospitals" class="level5">
+<h5 class="anchored" data-anchor-id="location-of-hospitals">Location of hospitals</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Location of hosp (map)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">leaflet</span>(<span class="at">data =</span> ed_slim) <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addProviderTiles</span>(providers<span class="sc">$</span>CartoDB.Positron) <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addAwesomeMarkers</span>(</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span>long, <span class="sc">~</span>lat,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">popup =</span> <span class="sc">~</span>facility,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="sc">~</span>facility)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-0af8d4029bfd87369a00" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-0af8d4029bfd87369a00">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["CartoDB.Positron",null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addAwesomeMarkers","args":[[33.968829,33.935017,34.054334],[-118.048719,-118.130489,-118.265557],null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},["PIH Health Whittier Hospital","PIH Health Downey Hospital","PIH Health Good Samaritan Hospital"],null,null,null,["PIH Health Whittier Hospital","PIH Health Downey Hospital","PIH Health Good Samaritan Hospital"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[33.935017,34.054334],"lng":[-118.265557,-118.048719]}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="color-coding-hospitals" class="level5">
+<h5 class="anchored" data-anchor-id="color-coding-hospitals">Color coding hospitals</h5>
+<p>At this point in the EDA process, the three PIH Health hospitals were given the following colors for ease of data visualization in graphs.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>hospital_colors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"PIH Health Downey Hospital"</span> <span class="ot">=</span> <span class="st">"darkred"</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"PIH Health Good Samaritan Hospital"</span> <span class="ot">=</span> <span class="st">"dodgerblue4"</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"PIH Health Whittier Hospital"</span> <span class="ot">=</span> <span class="st">"gold3"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="inpatient-bed-capacity" class="level5">
+<h5 class="anchored" data-anchor-id="inpatient-bed-capacity">Inpatient bed capacity</h5>
+<p>Having a visualization of licensed inpatient bed capacity across hospitals allows for general, straightforward comparison of institutional resources and highlighting differences in operational scale.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ipt_beds per hosp</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>ipt_summary <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(facility, ipt_beds)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ed_slim, <span class="fu">aes</span>(<span class="at">x =</span> facility, <span class="at">y =</span> ipt_beds, <span class="at">fill =</span> facility)) <span class="sc">+</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> ipt_beds), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> hospital_colors) <span class="sc">+</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Licensed Inpatient Beds per Hospital"</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Hospital"</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Licensed Inpatient Beds"</span>) <span class="sc">+</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="ed-bed-capacity" class="level5">
+<h5 class="anchored" data-anchor-id="ed-bed-capacity">ED bed capacity</h5>
+<p>Visualizing the number of licensed ED beds across hospitals makes it easy to compare ED capacity and highlight differences in available emergency resources among facilities.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ed_beds per hosp</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>ed_summary <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(facility, ed_beds)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ed_slim, <span class="fu">aes</span>(<span class="at">x =</span> facility, <span class="at">y =</span> ed_beds, <span class="at">fill =</span> facility)) <span class="sc">+</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> ed_beds), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> hospital_colors) <span class="sc">+</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Licensed ED Beds per Hospital"</span>,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Hospital"</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Licensed ED Beds"</span>) <span class="sc">+</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="key-dispo-ama" class="level5">
+<h5 class="anchored" data-anchor-id="key-dispo-ama">Key dispo: AMA</h5>
+<p>Visualizing the number of AMA dispositions across hospitals makes it possible to compare patient departure patterns.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># key dispo: ama</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ed_slim, <span class="fu">aes</span>(<span class="at">x =</span> facility, <span class="at">y =</span> disp_ama)) <span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"dodgerblue4"</span>) <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> disp_ama), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"AMA Dispositions per Hospital"</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Hospital"</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of AMA Dispositions"</span>) <span class="sc">+</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="key-dispo-psych-transfers" class="level5">
+<h5 class="anchored" data-anchor-id="key-dispo-psych-transfers">Key dispo: psych transfers</h5>
+<p>Visualizing the number of psychiatric care transfers across hospitals allows for comparison of how facilities handle patients requiring specialized psychiatric services and highlighting differences in resource allocation for mental health care, along with understanding how severe a patient’s case is to have to be transferred to a psychiatric facility for further care.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># key dispo: psych</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ed_slim, <span class="fu">aes</span>(<span class="at">x =</span> facility, <span class="at">y =</span> disp_psych)) <span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"dodgerblue4"</span>) <span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> disp_psych), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Psychiatric Dispositions per Hospital"</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Hospital"</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Psychiatric Dispositions"</span>) <span class="sc">+</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="key-dispo-snf-transfers" class="level5">
+<h5 class="anchored" data-anchor-id="key-dispo-snf-transfers">Key dispo: SNF transfers</h5>
+<p>Visualizing the number of SNF dispositions across hospitals enables comparison of post‑acute care pathways and highlights differences in how facilities transition patients to longer‑term supportive settings.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># key dispo: SNF</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ed_slim, <span class="fu">aes</span>(<span class="at">x =</span> facility, <span class="at">y =</span> disp_snf)) <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"dodgerblue4"</span>) <span class="sc">+</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> disp_snf), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"SNF Dispositions per Hospital"</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Hospital"</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of SNF Dispositions"</span>) <span class="sc">+</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="key-dispo-death" class="level5">
+<h5 class="anchored" data-anchor-id="key-dispo-death">Key dispo: death</h5>
+<p>Visualizing the number of death dispositions across hospitals highlights critical outcomes in emergency care and allows for comparison of mortality patterns, underscoring differences in patient acuity and institutional capacity to manage severe cases.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># key dispo: death</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ed_slim, <span class="fu">aes</span>(<span class="at">x =</span> facility, <span class="at">y =</span> disp_death)) <span class="sc">+</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"dodgerblue4"</span>) <span class="sc">+</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> disp_death), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Death Dispositions per Hospital"</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Hospital"</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Death Dispositions"</span>) <span class="sc">+</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="key-dispos-grouped-bar-chart-of-all-key-dispos" class="level5">
+<h5 class="anchored" data-anchor-id="key-dispos-grouped-bar-chart-of-all-key-dispos">Key dispos: grouped bar chart of all key dispos</h5>
+<p>Creating a grouped bar chart of key dispositions across hospitals allows for direct comparison of AMA, psychiatric transfers, SNF transfers, and deaths in a single visualization. This combined view highlights differences in patient pathways by facility and makes it easier to identify patterns in how hospitals manage critical disposition categories.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># key dispos combo: grouped bar chart</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>dispo_counts <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(facility,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>         disp_ama,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>         disp_psych,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>         disp_snf,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>         disp_death) <span class="sc">%&gt;%</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">AMA   =</span> disp_ama,</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Psych =</span> disp_psych,</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">SNF   =</span> disp_snf,</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Death =</span> disp_death</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>facility,</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"disposition"</span>,</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"count"</span>)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(dispo_counts,</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> <span class="sc">~</span>disposition,</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="sc">~</span>count,</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="sc">~</span>facility,</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">colors =</span> hospital_colors,</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">'bar'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">barmode =</span> <span class="st">'group'</span>,</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>         <span class="at">title =</span> <span class="st">"Key Dispositions per Hospital"</span>,</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>         <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Disposition Type"</span>),</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Number of Dispositions"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="key-dispos-summary-table" class="level5">
+<h5 class="anchored" data-anchor-id="key-dispos-summary-table">Key dispos: summary table</h5>
+<p>Creating a summary table of key dispositions provided a concise view of overall patient flow while normalizing AMA, psychiatric transfers, SNF transfers, and deaths as rates. This tabular format makes it straightforward to compare hospitals side‑by‑side and highlight differences in disposition patterns relative to total volume.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># key dispos: summary table</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>disp_summary <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_disp =</span> disp_acute <span class="sc">+</span> disp_ama <span class="sc">+</span> disp_childrens_or_cancer <span class="sc">+</span> disp_death <span class="sc">+</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>      disp_home_health_service <span class="sc">+</span> disp_not_defined_elsewhere <span class="sc">+</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>      disp_prison_jail <span class="sc">+</span> disp_psych <span class="sc">+</span> disp_routine <span class="sc">+</span> disp_snf <span class="sc">+</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>      disp_hospice_care <span class="sc">+</span> disp_residential_care <span class="sc">+</span> disp_other,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">ama_rate   =</span> disp_ama <span class="sc">/</span> total_disp,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">psych_rate =</span> disp_psych <span class="sc">/</span> total_disp,</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">snf_rate   =</span> disp_snf <span class="sc">/</span> total_disp,</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">death_rate =</span> disp_death <span class="sc">/</span> total_disp) <span class="sc">%&gt;%</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(facility, total_disp, ama_rate, psych_rate, snf_rate, death_rate)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(disp_summary, <span class="at">digits =</span> <span class="dv">3</span>,</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Hospital"</span>, <span class="st">"Total Dispositions"</span>,</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"AMA Rate"</span>, <span class="st">"Psych Rate"</span>, <span class="st">"SNF Rate"</span>, <span class="st">"Death Rate"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 37%">
+<col style="width: 20%">
+<col style="width: 9%">
+<col style="width: 11%">
+<col style="width: 9%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Hospital</th>
+<th style="text-align: right;">Total Dispositions</th>
+<th style="text-align: right;">AMA Rate</th>
+<th style="text-align: right;">Psych Rate</th>
+<th style="text-align: right;">SNF Rate</th>
+<th style="text-align: right;">Death Rate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">PIH Health Whittier Hospital</td>
+<td style="text-align: right;">61112</td>
+<td style="text-align: right;">0.017</td>
+<td style="text-align: right;">0.009</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.001</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PIH Health Downey Hospital</td>
+<td style="text-align: right;">51758</td>
+<td style="text-align: right;">0.014</td>
+<td style="text-align: right;">0.003</td>
+<td style="text-align: right;">0.005</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PIH Health Good Samaritan Hospital</td>
+<td style="text-align: right;">36557</td>
+<td style="text-align: right;">0.062</td>
+<td style="text-align: right;">0.011</td>
+<td style="text-align: right;">0.007</td>
+<td style="text-align: right;">0.002</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="payer-mix---individual-downey-good-sam-whittier" class="level5">
+<h5 class="anchored" data-anchor-id="payer-mix---individual-downey-good-sam-whittier">Payer mix - individual: Downey, Good Sam, &amp; Whittier,</h5>
+<p>Visualizing the payer mix for each hospital individually highlights the distribution of patients by insurance type, making it easier to compare reliance on different coverage sources and identify patterns in financial accessibility and resource allocation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># payer mix: downey</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>downey_payer_counts <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(facility <span class="sc">==</span> <span class="st">"PIH Health Downey Hospital"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(facility,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>         payer_medical,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>         payer_medicare,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>         payer_private,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>         payer_uninsured,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>         payer_all_other_payers,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>         payer_other_government,</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>         payer_other_unknown) <span class="sc">%&gt;%</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Medical   =</span> payer_medical,</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Medicare  =</span> payer_medicare,</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Private   =</span> payer_private,</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">Uninsured =</span> payer_uninsured,</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">All_Other =</span> payer_all_other_payers,</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Other_Gov =</span> payer_other_government,</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">Unknown   =</span> payer_other_unknown</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>facility,</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"payer_type"</span>,</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"count"</span>)</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(downey_payer_counts, <span class="fu">aes</span>(<span class="at">x =</span> payer_type, <span class="at">y =</span> count)) <span class="sc">+</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"dodgerblue4"</span>) <span class="sc">+</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> count), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Payer Mix – PIH Health Downey Hospital"</span>,</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Payer Type"</span>,</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Dispositions"</span>) <span class="sc">+</span></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># payer mix: good sam</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>goodsam_payer_counts <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(facility <span class="sc">==</span> <span class="st">"PIH Health Good Samaritan Hospital"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(facility,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>         payer_medical,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>         payer_medicare,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>         payer_private,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>         payer_uninsured,</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>         payer_all_other_payers,</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>         payer_other_government,</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>         payer_other_unknown) <span class="sc">%&gt;%</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Medical   =</span> payer_medical,</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Medicare  =</span> payer_medicare,</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Private   =</span> payer_private,</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">Uninsured =</span> payer_uninsured,</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">All_Other =</span> payer_all_other_payers,</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Other_Gov =</span> payer_other_government,</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">Unknown   =</span> payer_other_unknown</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>facility,</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"payer_type"</span>,</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"count"</span>)</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(goodsam_payer_counts, <span class="fu">aes</span>(<span class="at">x =</span> payer_type, <span class="at">y =</span> count)) <span class="sc">+</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"dodgerblue4"</span>) <span class="sc">+</span></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> count), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Payer Mix – PIH Health Good Samaritan Hospital"</span>,</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Payer Type"</span>,</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Dispositions"</span>) <span class="sc">+</span></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># payer mix: whittier</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>whittier_payer_counts <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(facility <span class="sc">==</span> <span class="st">"PIH Health Whittier Hospital"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(facility,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>         payer_medical,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>         payer_medicare,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>         payer_private,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>         payer_uninsured,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>         payer_all_other_payers,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>         payer_other_government,</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>         payer_other_unknown) <span class="sc">%&gt;%</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Medical   =</span> payer_medical,</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Medicare  =</span> payer_medicare,</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Private   =</span> payer_private,</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">Uninsured =</span> payer_uninsured,</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">All_Other =</span> payer_all_other_payers,</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Other_Gov =</span> payer_other_government,</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">Unknown   =</span> payer_other_unknown</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>facility,</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"payer_type"</span>,</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"count"</span>)</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(whittier_payer_counts, <span class="fu">aes</span>(<span class="at">x =</span> payer_type, <span class="at">y =</span> count)) <span class="sc">+</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"dodgerblue4"</span>) <span class="sc">+</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> count), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Payer Mix – PIH Health Whittier Hospital"</span>,</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Payer Type"</span>,</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Dispositions"</span>) <span class="sc">+</span></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="payer-mix-combined-table" class="level5">
+<h5 class="anchored" data-anchor-id="payer-mix-combined-table">Payer mix combined: table</h5>
+<p>Creating a payer mix summary table provides a clear, structured view of how each hospital’s patient population is distributed across insurance types. Presenting the data in tabular form makes it straightforward to compare coverage sources side‑by‑side and highlight differences in financial accessibility and reliance on various payer categories.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>payer_table <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(facility,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>         payer_medical,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>         payer_medicare,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>         payer_private,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>         payer_uninsured,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>         payer_all_other_payers,</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>         payer_other_government,</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>         payer_other_unknown) <span class="sc">%&gt;%</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Medical   =</span> payer_medical,</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Medicare  =</span> payer_medicare,</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Private   =</span> payer_private,</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Uninsured =</span> payer_uninsured,</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">All_Other =</span> payer_all_other_payers,</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">Other_Gov =</span> payer_other_government,</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">Unknown   =</span> payer_other_unknown)</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(payer_table,</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Hospital"</span>, <span class="st">"Medical"</span>, <span class="st">"Medicare"</span>, <span class="st">"Private"</span>, <span class="st">"Uninsured"</span>,</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"All Other"</span>, <span class="st">"Other Gov"</span>, <span class="st">"Unknown"</span>),</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="fu">rep</span>(<span class="st">"c"</span>, <span class="dv">7</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 8%">
+<col style="width: 9%">
+<col style="width: 8%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Hospital</th>
+<th style="text-align: center;">Medical</th>
+<th style="text-align: center;">Medicare</th>
+<th style="text-align: center;">Private</th>
+<th style="text-align: center;">Uninsured</th>
+<th style="text-align: center;">All Other</th>
+<th style="text-align: center;">Other Gov</th>
+<th style="text-align: center;">Unknown</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">PIH Health Whittier Hospital</td>
+<td style="text-align: center;">26662</td>
+<td style="text-align: center;">12627</td>
+<td style="text-align: center;">17136</td>
+<td style="text-align: center;">3240</td>
+<td style="text-align: center;">698</td>
+<td style="text-align: center;">380</td>
+<td style="text-align: center;">369</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PIH Health Downey Hospital</td>
+<td style="text-align: center;">30597</td>
+<td style="text-align: center;">8198</td>
+<td style="text-align: center;">9719</td>
+<td style="text-align: center;">2513</td>
+<td style="text-align: center;">297</td>
+<td style="text-align: center;">207</td>
+<td style="text-align: center;">227</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PIH Health Good Samaritan Hospital</td>
+<td style="text-align: center;">21256</td>
+<td style="text-align: center;">6483</td>
+<td style="text-align: center;">4131</td>
+<td style="text-align: center;">4367</td>
+<td style="text-align: center;">232</td>
+<td style="text-align: center;">82</td>
+<td style="text-align: center;">6</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="payer-mix-combined-grouped-bar-chart" class="level5">
+<h5 class="anchored" data-anchor-id="payer-mix-combined-grouped-bar-chart">Payer mix: combined grouped bar chart</h5>
+<p>Visualizing the payer mix across all hospitals in a grouped bar chart enables direct comparison of insurance coverage distributions by facility.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># payer mix: combo grouped bar chart</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>payer_counts <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(facility,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>         payer_medical,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>         payer_medicare,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>         payer_private,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>         payer_uninsured,</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>         payer_all_other_payers,</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>         payer_other_government,</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>         payer_other_unknown) <span class="sc">%&gt;%</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Medical   =</span> payer_medical,</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Medicare  =</span> payer_medicare,</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Private   =</span> payer_private,</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Uninsured =</span> payer_uninsured,</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">All_Other =</span> payer_all_other_payers,</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">Other_Gov =</span> payer_other_government,</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Unknown   =</span> payer_other_unknown</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>facility,</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"payer_type"</span>,</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"count"</span>)</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> payer_counts,</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="sc">~</span>payer_type,</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="sc">~</span>count,</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">color =</span> <span class="sc">~</span>facility,</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">colors =</span> hospital_colors,</span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">'bar'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">barmode =</span> <span class="st">'group'</span>,</span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Payer Mix – All Hospitals"</span>,</span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Payer Type"</span>, <span class="at">tickangle =</span> <span class="dv">45</span>),</span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Number of Dispositions"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-46ae50109dcc07f762ab" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-46ae50109dcc07f762ab">{"x":{"visdat":{"13da51b0bdd14":["function () ","plotlyVisDat"]},"cur_data":"13da51b0bdd14","attrs":{"13da51b0bdd14":{"x":{},"y":{},"color":{},"colors":["darkred","dodgerblue4","gold3"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"barmode":"group","title":"Payer Mix – All Hospitals","xaxis":{"domain":[0,1],"automargin":true,"title":"Payer Type","tickangle":45,"type":"category","categoryorder":"array","categoryarray":["All_Other","Medical","Medicare","Other_Gov","Private","Uninsured","Unknown"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Number of Dispositions"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["Medical","Medicare","Private","Uninsured","All_Other","Other_Gov","Unknown"],"y":[30597,8198,9719,2513,297,207,227],"type":"bar","name":"PIH Health Downey Hospital","marker":{"color":"rgba(139,0,0,1)","line":{"color":"rgba(139,0,0,1)"}},"textfont":{"color":"rgba(139,0,0,1)"},"error_y":{"color":"rgba(139,0,0,1)"},"error_x":{"color":"rgba(139,0,0,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Medical","Medicare","Private","Uninsured","All_Other","Other_Gov","Unknown"],"y":[21256,6483,4131,4367,232,82,6],"type":"bar","name":"PIH Health Good Samaritan Hospital","marker":{"color":"rgba(16,78,139,1)","line":{"color":"rgba(16,78,139,1)"}},"textfont":{"color":"rgba(16,78,139,1)"},"error_y":{"color":"rgba(16,78,139,1)"},"error_x":{"color":"rgba(16,78,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Medical","Medicare","Private","Uninsured","All_Other","Other_Gov","Unknown"],"y":[26662,12627,17136,3240,698,380,369],"type":"bar","name":"PIH Health Whittier Hospital","marker":{"color":"rgba(205,173,0,1)","line":{"color":"rgba(205,173,0,1)"}},"textfont":{"color":"rgba(205,173,0,1)"},"error_y":{"color":"rgba(205,173,0,1)"},"error_x":{"color":"rgba(205,173,0,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="diagnosis-dx-category-cat---individual-downey-good-sam-whittier" class="level5">
+<h5 class="anchored" data-anchor-id="diagnosis-dx-category-cat---individual-downey-good-sam-whittier">Diagnosis (dx) category (cat) - individual: Downey, Good Sam, Whittier</h5>
+<p>Visualizing the diagnosis categories for each hospital individually highlights the distribution of patient conditions, making it easier to compare reliance on different clinical service areas and identify patterns in case mix and resource demand.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dx cat: downey</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>downey_dx_counts <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(facility <span class="sc">==</span> <span class="st">"PIH Health Downey Hospital"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(facility,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>         dx_cardio,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>         dx_resp,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>         dx_injury,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>         dx_mental,</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>         dx_other_unknown) <span class="sc">%&gt;%</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Cardio       =</span> dx_cardio,</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Respiratory  =</span> dx_resp,</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Injury       =</span> dx_injury,</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mental       =</span> dx_mental,</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Other_Unknown =</span> dx_other_unknown</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>facility,</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"dx_category"</span>,</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"count"</span>)</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(downey_dx_counts, <span class="fu">aes</span>(<span class="at">x =</span> dx_category, <span class="at">y =</span> count)) <span class="sc">+</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"dodgerblue4"</span>) <span class="sc">+</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> count), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Diagnosis Categories – PIH Health Downey Hospital"</span>,</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Diagnosis Category"</span>,</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Dispositions"</span>) <span class="sc">+</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dx cat: good sam</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>goodsam_dx_counts <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(facility <span class="sc">==</span> <span class="st">"PIH Health Good Samaritan Hospital"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(facility,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>         dx_cardio,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>         dx_resp,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>         dx_injury,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>         dx_mental,</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>         dx_other_unknown) <span class="sc">%&gt;%</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Cardio       =</span> dx_cardio,</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Respiratory  =</span> dx_resp,</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Injury       =</span> dx_injury,</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mental       =</span> dx_mental,</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Other_Unknown =</span> dx_other_unknown</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>facility,</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"dx_category"</span>,</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"count"</span>)</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(goodsam_dx_counts, <span class="fu">aes</span>(<span class="at">x =</span> dx_category, <span class="at">y =</span> count)) <span class="sc">+</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"dodgerblue4"</span>) <span class="sc">+</span></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> count), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Diagnosis Categories – PIH Health Good Samaritan Hospital"</span>,</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Diagnosis Category"</span>,</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Dispositions"</span>) <span class="sc">+</span></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dx cat: whittier</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>whittier_dx_counts <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(facility <span class="sc">==</span> <span class="st">"PIH Health Whittier Hospital"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(facility,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>         dx_cardio,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>         dx_resp,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>         dx_injury,</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>         dx_mental,</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>         dx_other_unknown) <span class="sc">%&gt;%</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Cardio       =</span> dx_cardio,</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Respiratory  =</span> dx_resp,</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Injury       =</span> dx_injury,</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mental       =</span> dx_mental,</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Other_Unknown =</span> dx_other_unknown</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>facility,</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"dx_category"</span>,</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"count"</span>)</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(whittier_dx_counts, <span class="fu">aes</span>(<span class="at">x =</span> dx_category, <span class="at">y =</span> count)) <span class="sc">+</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"dodgerblue4"</span>) <span class="sc">+</span></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> count), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Diagnosis Categories – PIH Health Whittier Hospital"</span>,</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Diagnosis Category"</span>,</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Dispositions"</span>) <span class="sc">+</span></span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="dx-cat-combined-grouped-bar-chart" class="level5">
+<h5 class="anchored" data-anchor-id="dx-cat-combined-grouped-bar-chart">Dx cat combined: grouped bar chart</h5>
+<p>Visualizing diagnosis categories across all hospitals in a grouped bar chart enables direct comparison of patient case mixes by facility. This combined view highlights differences in clinical demand areas and makes it easier to identify patterns in how hospitals manage varying types of conditions.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dx cat combo: grouped bar chart</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>dx_counts <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(facility,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>         dx_cardio,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>         dx_resp,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>         dx_injury,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>         dx_mental,</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>         dx_other_unknown) <span class="sc">%&gt;%</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Cardio       =</span> dx_cardio,</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Respiratory  =</span> dx_resp,</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Injury       =</span> dx_injury,</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mental       =</span> dx_mental,</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Other_Unknown =</span> dx_other_unknown</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>facility,</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"dx_category"</span>,</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"count"</span>)</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(dx_counts,</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> <span class="sc">~</span>dx_category,</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="sc">~</span>count,</span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="sc">~</span>facility,</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">colors =</span> hospital_colors,</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">'bar'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">barmode =</span> <span class="st">'group'</span>,</span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">title =</span> <span class="st">"Diagnosis Categories – All Hospitals"</span>,</span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>         <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Diagnosis Category"</span>, <span class="at">tickangle =</span> <span class="dv">45</span>),</span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>         <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Number of Dispositions"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-706eee46519e433eccc1" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-706eee46519e433eccc1">{"x":{"visdat":{"13da5660ce347":["function () ","plotlyVisDat"]},"cur_data":"13da5660ce347","attrs":{"13da5660ce347":{"x":{},"y":{},"color":{},"colors":["darkred","dodgerblue4","gold3"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"barmode":"group","title":"Diagnosis Categories – All Hospitals","xaxis":{"domain":[0,1],"automargin":true,"title":"Diagnosis Category","tickangle":45,"type":"category","categoryorder":"array","categoryarray":["Cardio","Injury","Mental","Other_Unknown","Respiratory"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Number of Dispositions"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["Cardio","Respiratory","Injury","Mental","Other_Unknown"],"y":[3550,4030,9400,1126,12],"type":"bar","name":"PIH Health Downey Hospital","marker":{"color":"rgba(139,0,0,1)","line":{"color":"rgba(139,0,0,1)"}},"textfont":{"color":"rgba(139,0,0,1)"},"error_y":{"color":"rgba(139,0,0,1)"},"error_x":{"color":"rgba(139,0,0,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Cardio","Respiratory","Injury","Mental","Other_Unknown"],"y":[2566,2236,8052,2151,6],"type":"bar","name":"PIH Health Good Samaritan Hospital","marker":{"color":"rgba(16,78,139,1)","line":{"color":"rgba(16,78,139,1)"}},"textfont":{"color":"rgba(16,78,139,1)"},"error_y":{"color":"rgba(16,78,139,1)"},"error_x":{"color":"rgba(16,78,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Cardio","Respiratory","Injury","Mental","Other_Unknown"],"y":[4270,4868,12289,1659,12],"type":"bar","name":"PIH Health Whittier Hospital","marker":{"color":"rgba(205,173,0,1)","line":{"color":"rgba(205,173,0,1)"}},"textfont":{"color":"rgba(205,173,0,1)"},"error_y":{"color":"rgba(205,173,0,1)"},"error_x":{"color":"rgba(205,173,0,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="age-distribution-counts" class="level5">
+<h5 class="anchored" data-anchor-id="age-distribution-counts">Age distribution counts</h5>
+<p>Visualizing age distribution across all hospitals in a combined line chart highlights differences in patient populations by age group. This view makes it easier to compare demographic patterns across facilities and identify variations in demand for age‑specific care.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># age distribution combo</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>age_counts <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(facility,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>         age_0_09,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>         age_10_19,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>         age_20_29,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>         age_30_39,</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>         age_40_49,</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>         age_50_59,</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>         age_60_69,</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>         age_70_79,</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>         age_80) <span class="sc">%&gt;%</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">0-9</span><span class="st">`</span>   <span class="ot">=</span> age_0_09,</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">10-19</span><span class="st">`</span> <span class="ot">=</span> age_10_19,</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">20-29</span><span class="st">`</span> <span class="ot">=</span> age_20_29,</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">30-39</span><span class="st">`</span> <span class="ot">=</span> age_30_39,</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">40-49</span><span class="st">`</span> <span class="ot">=</span> age_40_49,</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">50-59</span><span class="st">`</span> <span class="ot">=</span> age_50_59,</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">60-69</span><span class="st">`</span> <span class="ot">=</span> age_60_69,</span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">70-79</span><span class="st">`</span> <span class="ot">=</span> age_70_79,</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">80+</span><span class="st">`</span>   <span class="ot">=</span> age_80</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>facility,</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"age_group"</span>,</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"count"</span>)</span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(age_counts,</span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> <span class="sc">~</span>age_group,</span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="sc">~</span>count,</span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="sc">~</span>facility,</span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>        <span class="at">colors =</span> hospital_colors,</span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">'scatter'</span>,</span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>        <span class="at">mode =</span> <span class="st">'lines+markers'</span>,</span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">marker =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>        <span class="at">line =</span> <span class="fu">list</span>(<span class="at">width =</span> <span class="dv">3</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">title =</span> <span class="st">"Age Distribution – All Hospitals"</span>,</span>
+<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a>         <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Age Group"</span>, <span class="at">tickangle =</span> <span class="dv">45</span>),</span>
+<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>         <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Count"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-83ec74f1366df81bb2c2" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-83ec74f1366df81bb2c2">{"x":{"visdat":{"13da5e7d75e0":["function () ","plotlyVisDat"]},"cur_data":"13da5e7d75e0","attrs":{"13da5e7d75e0":{"x":{},"y":{},"mode":"lines+markers","marker":{"size":8},"line":{"width":3},"color":{},"colors":["darkred","dodgerblue4","gold3"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Age Distribution – All Hospitals","xaxis":{"domain":[0,1],"automargin":true,"title":"Age Group","tickangle":45,"type":"category","categoryorder":"array","categoryarray":["0-9","10-19","20-29","30-39","40-49","50-59","60-69","70-79","80+"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Count"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["0-9","10-19","20-29","30-39","40-49","50-59","60-69","70-79","80+"],"y":[5258,5702,8421,8174,6508,6111,5360,3664,2546],"mode":"lines+markers","marker":{"color":"rgba(139,0,0,1)","size":8,"line":{"color":"rgba(139,0,0,1)"}},"line":{"color":"rgba(139,0,0,1)","width":3},"type":"scatter","name":"PIH Health Downey Hospital","textfont":{"color":"rgba(139,0,0,1)"},"error_y":{"color":"rgba(139,0,0,1)"},"error_x":{"color":"rgba(139,0,0,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["0-9","10-19","20-29","30-39","40-49","50-59","60-69","70-79","80+"],"y":[792,1672,6633,7430,5722,5018,4639,2807,1784],"mode":"lines+markers","marker":{"color":"rgba(16,78,139,1)","size":8,"line":{"color":"rgba(16,78,139,1)"}},"line":{"color":"rgba(16,78,139,1)","width":3},"type":"scatter","name":"PIH Health Good Samaritan Hospital","textfont":{"color":"rgba(16,78,139,1)"},"error_y":{"color":"rgba(16,78,139,1)"},"error_x":{"color":"rgba(16,78,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["0-9","10-19","20-29","30-39","40-49","50-59","60-69","70-79","80+"],"y":[6380,5902,9043,9148,7362,7053,6423,5193,4593],"mode":"lines+markers","marker":{"color":"rgba(205,173,0,1)","size":8,"line":{"color":"rgba(205,173,0,1)"}},"line":{"color":"rgba(205,173,0,1)","width":3},"type":"scatter","name":"PIH Health Whittier Hospital","textfont":{"color":"rgba(205,173,0,1)"},"error_y":{"color":"rgba(205,173,0,1)"},"error_x":{"color":"rgba(205,173,0,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="normalizing-dispo-counts" class="level5">
+<h5 class="anchored" data-anchor-id="normalizing-dispo-counts">Normalizing dispo counts</h5>
+<p>It was important to normalize the counts because hospitals vary widely in their overall patient volumes, and raw numbers alone could misrepresent differences in disposition patterns. Normalization ensures that comparisons reflect relative proportions rather than being skewed by facility size.</p>
+<p>Counts were normalized to account for differences in overall patient volume across hospitals. By converting raw disposition counts into proportions of total dispositions, the analysis allows for fair comparison of AMA, psychiatric transfers, SNF transfers, and deaths relative to each hospital’s scale, highlighting patterns that might otherwise be obscured by size differences.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>ed_slim <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_disp =</span> <span class="fu">rowSums</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">"disp_"</span>)), <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>dispo_props <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">AMA_prop   =</span> disp_ama   <span class="sc">/</span> total_disp,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">Psych_prop =</span> disp_psych <span class="sc">/</span> total_disp,</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">SNF_prop   =</span> disp_snf   <span class="sc">/</span> total_disp,</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Death_prop =</span> disp_death <span class="sc">/</span> total_disp</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(facility, AMA_prop, Psych_prop, SNF_prop, Death_prop)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="normalize-payer-mix" class="level5">
+<h5 class="anchored" data-anchor-id="normalize-payer-mix">Normalize payer mix</h5>
+<p>It was necessary to normalize the payer mix because hospitals differ in their overall patient volumes, and raw counts alone could exaggerate or obscure differences in coverage sources. Normalization ensures that comparisons reflect the relative share of each payer type rather than being skewed by facility size.</p>
+<p>By converting raw payer counts into proportions of total dispositions, the analysis allows for fair comparison of Medical, Medicare, Private, Uninsured, and other categories across hospitals. This highlights differences in financial accessibility and institutional reliance on specific coverage sources, making patterns in payer distribution clearer and more meaningful.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># normolize payer mix</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>payer_props <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_payer =</span> payer_medical <span class="sc">+</span> payer_medicare <span class="sc">+</span> payer_private <span class="sc">+</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>           payer_uninsured <span class="sc">+</span> payer_all_other_payers <span class="sc">+</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>           payer_other_government <span class="sc">+</span> payer_other_unknown) <span class="sc">%&gt;%</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">Medical_prop   =</span> payer_medical   <span class="sc">/</span> total_payer,</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Medicare_prop  =</span> payer_medicare  <span class="sc">/</span> total_payer,</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Private_prop   =</span> payer_private   <span class="sc">/</span> total_payer,</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Uninsured_prop =</span> payer_uninsured <span class="sc">/</span> total_payer,</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">AllOther_prop  =</span> payer_all_other_payers <span class="sc">/</span> total_payer,</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">OtherGov_prop  =</span> payer_other_government <span class="sc">/</span> total_payer,</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Unknown_prop   =</span> payer_other_unknown <span class="sc">/</span> total_payer</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(facility, Medical_prop, Medicare_prop, Private_prop,</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>         Uninsured_prop, AllOther_prop, OtherGov_prop, Unknown_prop)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="normalizing-diagnosis-categories" class="level5">
+<h5 class="anchored" data-anchor-id="normalizing-diagnosis-categories">Normalizing diagnosis categories</h5>
+<p>It was necessary to normalize the diagnosis category counts because hospitals differ in their overall patient volumes, and raw numbers alone could obscure meaningful differences in case mix. Normalization ensures that comparisons reflect the relative share of each diagnosis type rather than being skewed by facility size.</p>
+<p>By converting raw diagnosis counts into proportions of total diagnoses, the analysis allows for fair comparison of cardiovascular, respiratory, injury, mental health, and other/unknown categories across hospitals. This highlights differences in clinical demand patterns and makes case mix variation clearer and more interpretable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># normalize dx cats</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>dx_props <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_dx =</span> dx_cardio <span class="sc">+</span> dx_resp <span class="sc">+</span> dx_injury <span class="sc">+</span> dx_mental <span class="sc">+</span> dx_other_unknown) <span class="sc">%&gt;%</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Cardio_prop      =</span> dx_cardio <span class="sc">/</span> total_dx,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Respiratory_prop =</span> dx_resp   <span class="sc">/</span> total_dx,</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">Injury_prop      =</span> dx_injury <span class="sc">/</span> total_dx,</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mental_prop      =</span> dx_mental <span class="sc">/</span> total_dx,</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Other_prop       =</span> dx_other_unknown <span class="sc">/</span> total_dx</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(facility, Cardio_prop, Respiratory_prop, Injury_prop, Mental_prop, Other_prop)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="normalizing-age" class="level5">
+<h5 class="anchored" data-anchor-id="normalizing-age">Normalizing age</h5>
+<p>It was necessary to normalize the age distribution because hospitals differ in their overall patient volumes, and raw counts alone could obscure meaningful demographic differences. Normalization ensures that comparisons reflect the relative share of each age group rather than being skewed by facility size.</p>
+<p>By converting raw age counts into proportions of total patients, the analysis allows for fair comparison of pediatric, adult, and elderly populations across hospitals. This highlights demographic patterns more clearly and makes it easier to identify variations in age‑specific demand for care.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># normalize age</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>age_props <span class="ot">&lt;-</span> ed_slim <span class="sc">%&gt;%</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_age =</span> age_0_09 <span class="sc">+</span> age_10_19 <span class="sc">+</span> age_20_29 <span class="sc">+</span> age_30_39 <span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>           age_40_49 <span class="sc">+</span> age_50_59 <span class="sc">+</span> age_60_69 <span class="sc">+</span> age_70_79 <span class="sc">+</span> age_80) <span class="sc">%&gt;%</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">age_0_09_prop  =</span> age_0_09  <span class="sc">/</span> total_age,</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">age_10_19_prop =</span> age_10_19 <span class="sc">/</span> total_age,</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">age_20_29_prop =</span> age_20_29 <span class="sc">/</span> total_age,</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">age_30_39_prop =</span> age_30_39 <span class="sc">/</span> total_age,</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">age_40_49_prop =</span> age_40_49 <span class="sc">/</span> total_age,</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">age_50_59_prop =</span> age_50_59 <span class="sc">/</span> total_age,</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">age_60_69_prop =</span> age_60_69 <span class="sc">/</span> total_age,</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">age_70_79_prop =</span> age_70_79 <span class="sc">/</span> total_age,</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">age_80_prop    =</span> age_80    <span class="sc">/</span> total_age</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(facility, age_0_09_prop, age_10_19_prop, age_20_29_prop,</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>         age_30_39_prop, age_40_49_prop, age_50_59_prop,</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>         age_60_69_prop, age_70_79_prop, age_80_prop)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="dispo-proportions" class="level5">
+<h5 class="anchored" data-anchor-id="dispo-proportions">Dispo proportions</h5>
+<p>Visualizing disposition proportions across hospitals in a grouped bar chart highlights relative differences in AMA, psychiatric transfers, SNF transfers, and deaths. By using proportions rather than raw counts, the chart allows for fair comparison across facilities of varying patient volumes and makes patterns in critical disposition categories clearer and more interpretable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Disposition proportions</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>dispo_long <span class="ot">&lt;-</span> dispo_props <span class="sc">%&gt;%</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">AMA</span><span class="st">`</span> <span class="ot">=</span> AMA_prop,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Psych Transfer</span><span class="st">`</span>   <span class="ot">=</span> Psych_prop,</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">SNF</span><span class="st">`</span>        <span class="ot">=</span> SNF_prop,</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Death</span><span class="st">`</span>                  <span class="ot">=</span> Death_prop</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">`</span><span class="at">AMA</span><span class="st">`</span>, </span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>                        <span class="st">`</span><span class="at">Psych Transfer</span><span class="st">`</span>, </span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>                        <span class="st">`</span><span class="at">SNF</span><span class="st">`</span>, </span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>                        <span class="st">`</span><span class="at">Death</span><span class="st">`</span>),</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"disposition"</span>,</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"proportion"</span>)</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(dispo_long,</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> <span class="sc">~</span>disposition,</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="sc">~</span>proportion,</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="sc">~</span>facility,</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">colors =</span> hospital_colors,</span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">'bar'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">barmode =</span> <span class="st">'group'</span>,</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>         <span class="at">title =</span> <span class="st">"Disposition Proportions – All Hospitals"</span>,</span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>         <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Disposition Type"</span>, <span class="at">tickangle =</span> <span class="dv">45</span>),</span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>         <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Proportion of Total Dispositions"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-51fdf584d76685ccf121" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-51fdf584d76685ccf121">{"x":{"visdat":{"13da51f4992f6":["function () ","plotlyVisDat"]},"cur_data":"13da51f4992f6","attrs":{"13da51f4992f6":{"x":{},"y":{},"color":{},"colors":["darkred","dodgerblue4","gold3"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"barmode":"group","title":"Disposition Proportions – All Hospitals","xaxis":{"domain":[0,1],"automargin":true,"title":"Disposition Type","tickangle":45,"type":"category","categoryorder":"array","categoryarray":["AMA","Death","Psych Transfer","SNF"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Proportion of Total Dispositions"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["AMA","Psych Transfer","SNF","Death"],"y":[0.013833610263147725,0.0028594613393098651,0.0045790022798407977,0.00038641369450133313],"type":"bar","name":"PIH Health Downey Hospital","marker":{"color":"rgba(139,0,0,1)","line":{"color":"rgba(139,0,0,1)"}},"textfont":{"color":"rgba(139,0,0,1)"},"error_y":{"color":"rgba(139,0,0,1)"},"error_x":{"color":"rgba(139,0,0,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["AMA","Psych Transfer","SNF","Death"],"y":[0.062176874470005743,0.010640916924255273,0.0071121809776513393,0.0021883633777388736],"type":"bar","name":"PIH Health Good Samaritan Hospital","marker":{"color":"rgba(16,78,139,1)","line":{"color":"rgba(16,78,139,1)"}},"textfont":{"color":"rgba(16,78,139,1)"},"error_y":{"color":"rgba(16,78,139,1)"},"error_x":{"color":"rgba(16,78,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["AMA","Psych Transfer","SNF","Death"],"y":[0.016707029715931406,0.0087544181175546534,0.0024708731509359865,0.001030894096085875],"type":"bar","name":"PIH Health Whittier Hospital","marker":{"color":"rgba(205,173,0,1)","line":{"color":"rgba(205,173,0,1)"}},"textfont":{"color":"rgba(205,173,0,1)"},"error_y":{"color":"rgba(205,173,0,1)"},"error_x":{"color":"rgba(205,173,0,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="payer-mix-proportions" class="level5">
+<h5 class="anchored" data-anchor-id="payer-mix-proportions">Payer mix proportions</h5>
+<p>Visualizing payer mix proportions across hospitals in a grouped bar chart highlights the relative share of Medi‑Cal, Medicare, private insurance, uninsured, and other coverage types. Using proportions rather than raw counts allows for fair comparison across facilities of different sizes and makes patterns in financial accessibility and institutional reliance on specific payer categories clearer and more interpretable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># payer mix prop</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>payer_long <span class="ot">&lt;-</span> payer_props <span class="sc">%&gt;%</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Medi-Cal</span><span class="st">`</span>          <span class="ot">=</span> Medical_prop,</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Medicare</span><span class="st">`</span>          <span class="ot">=</span> Medicare_prop,</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Private Insurance</span><span class="st">`</span> <span class="ot">=</span> Private_prop,</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Uninsured</span><span class="st">`</span>         <span class="ot">=</span> Uninsured_prop,</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">All Other Payers</span><span class="st">`</span>  <span class="ot">=</span> AllOther_prop,</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Other Government</span><span class="st">`</span>  <span class="ot">=</span> OtherGov_prop,</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Unknown</span><span class="st">`</span>           <span class="ot">=</span> Unknown_prop</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">`</span><span class="at">Medi-Cal</span><span class="st">`</span>, <span class="st">`</span><span class="at">Medicare</span><span class="st">`</span>, <span class="st">`</span><span class="at">Private Insurance</span><span class="st">`</span>,</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>                        <span class="st">`</span><span class="at">Uninsured</span><span class="st">`</span>, <span class="st">`</span><span class="at">All Other Payers</span><span class="st">`</span>,</span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>                        <span class="st">`</span><span class="at">Other Government</span><span class="st">`</span>, <span class="st">`</span><span class="at">Unknown</span><span class="st">`</span>),</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"payer_type"</span>,</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"proportion"</span>)</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(payer_long,</span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> <span class="sc">~</span>payer_type,</span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="sc">~</span>proportion,</span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="sc">~</span>facility,</span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">colors =</span> hospital_colors,</span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">'bar'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">barmode =</span> <span class="st">'group'</span>,</span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>         <span class="at">title =</span> <span class="st">"Payer Mix Proportions – All Hospitals"</span>,</span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>         <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Payer Type"</span>, <span class="at">tickangle =</span> <span class="dv">45</span>),</span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Proportion of Total Payer Mix"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-918fdfae5d877ff4e7b1" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-918fdfae5d877ff4e7b1">{"x":{"visdat":{"13da55998ee2e":["function () ","plotlyVisDat"]},"cur_data":"13da55998ee2e","attrs":{"13da55998ee2e":{"x":{},"y":{},"color":{},"colors":["darkred","dodgerblue4","gold3"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"barmode":"group","title":"Payer Mix Proportions – All Hospitals","xaxis":{"domain":[0,1],"automargin":true,"title":"Payer Type","tickangle":45,"type":"category","categoryorder":"array","categoryarray":["All Other Payers","Medi-Cal","Medicare","Other Government","Private Insurance","Uninsured","Unknown"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Proportion of Total Payer Mix"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["Medi-Cal","Medicare","Private Insurance","Uninsured","All Other Payers","Other Government","Unknown"],"y":[0.59115499053286447,0.15839097337609645,0.18777773484292284,0.048552880714092507,0.0057382433633447966,0.0039993817380887982,0.0043857954325901309],"type":"bar","name":"PIH Health Downey Hospital","marker":{"color":"rgba(139,0,0,1)","line":{"color":"rgba(139,0,0,1)"}},"textfont":{"color":"rgba(139,0,0,1)"},"error_y":{"color":"rgba(139,0,0,1)"},"error_x":{"color":"rgba(139,0,0,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Medi-Cal","Medicare","Private Insurance","Uninsured","All Other Payers","Other Government","Unknown"],"y":[0.58144814946521872,0.17733949722351397,0.11300161391799109,0.11945728588232075,0.006346253795442733,0.0022430724621823454,0.00016412725333041551],"type":"bar","name":"PIH Health Good Samaritan Hospital","marker":{"color":"rgba(16,78,139,1)","line":{"color":"rgba(16,78,139,1)"}},"textfont":{"color":"rgba(16,78,139,1)"},"error_y":{"color":"rgba(16,78,139,1)"},"error_x":{"color":"rgba(16,78,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Medi-Cal","Medicare","Private Insurance","Uninsured","All Other Payers","Other Government","Unknown"],"y":[0.43628092682288255,0.20662063097264038,0.28040319413535802,0.053017410655845004,0.011421652048697474,0.0062180913732163895,0.0060380939913601255],"type":"bar","name":"PIH Health Whittier Hospital","marker":{"color":"rgba(205,173,0,1)","line":{"color":"rgba(205,173,0,1)"}},"textfont":{"color":"rgba(205,173,0,1)"},"error_y":{"color":"rgba(205,173,0,1)"},"error_x":{"color":"rgba(205,173,0,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="dx-cat-proportions" class="level5">
+<h5 class="anchored" data-anchor-id="dx-cat-proportions">Dx cat proportions</h5>
+<p>Visualizing diagnosis category proportions across hospitals in a grouped bar chart highlights the relative distribution of cardiovascular, respiratory, injury/trauma, mental health, and other/unknown cases. By using proportions instead of raw counts, the chart allows for fair comparison across facilities of different sizes and makes variation in case mix clearer and more interpretable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dx cat prop</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>dx_long <span class="ot">&lt;-</span> dx_props <span class="sc">%&gt;%</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Cardiovascular</span><span class="st">`</span>     <span class="ot">=</span> Cardio_prop,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Respiratory</span><span class="st">`</span>        <span class="ot">=</span> Respiratory_prop,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Injury/Trauma</span><span class="st">`</span>      <span class="ot">=</span> Injury_prop,</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Mental Health</span><span class="st">`</span>      <span class="ot">=</span> Mental_prop,</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Other/Unknown</span><span class="st">`</span>      <span class="ot">=</span> Other_prop</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">`</span><span class="at">Cardiovascular</span><span class="st">`</span>, <span class="st">`</span><span class="at">Respiratory</span><span class="st">`</span>,</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>                        <span class="st">`</span><span class="at">Injury/Trauma</span><span class="st">`</span>, <span class="st">`</span><span class="at">Mental Health</span><span class="st">`</span>,</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>                        <span class="st">`</span><span class="at">Other/Unknown</span><span class="st">`</span>),</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"dx_category"</span>,</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"proportion"</span>)</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(dx_long,</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> <span class="sc">~</span>dx_category,</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="sc">~</span>proportion,</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="sc">~</span>facility,</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">colors =</span> hospital_colors,</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">'bar'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">barmode =</span> <span class="st">'group'</span>,</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>         <span class="at">title =</span> <span class="st">"Diagnosis Category Proportions – All Hospitals"</span>,</span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>         <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Diagnosis Category"</span>, <span class="at">tickangle =</span> <span class="dv">45</span>),</span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>         <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Proportion of Total Diagnoses"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-b7a005d264111e67b0ae" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-b7a005d264111e67b0ae">{"x":{"visdat":{"13da5793e1142":["function () ","plotlyVisDat"]},"cur_data":"13da5793e1142","attrs":{"13da5793e1142":{"x":{},"y":{},"color":{},"colors":["darkred","dodgerblue4","gold3"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"barmode":"group","title":"Diagnosis Category Proportions – All Hospitals","xaxis":{"domain":[0,1],"automargin":true,"title":"Diagnosis Category","tickangle":45,"type":"category","categoryorder":"array","categoryarray":["Cardiovascular","Injury/Trauma","Mental Health","Other/Unknown","Respiratory"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Proportion of Total Diagnoses"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["Cardiovascular","Respiratory","Injury/Trauma","Mental Health","Other/Unknown"],"y":[0.1959377414725687,0.2224307318688597,0.5188210619273651,0.062148139971299261,0.00066232475990727453],"type":"bar","name":"PIH Health Downey Hospital","marker":{"color":"rgba(139,0,0,1)","line":{"color":"rgba(139,0,0,1)"}},"textfont":{"color":"rgba(139,0,0,1)"},"error_y":{"color":"rgba(139,0,0,1)"},"error_x":{"color":"rgba(139,0,0,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Cardiovascular","Respiratory","Injury/Trauma","Mental Health","Other/Unknown"],"y":[0.17094130970621543,0.14895743121710744,0.53640663513423492,0.14329491706082206,0.00039970688162014521],"type":"bar","name":"PIH Health Good Samaritan Hospital","marker":{"color":"rgba(16,78,139,1)","line":{"color":"rgba(16,78,139,1)"}},"textfont":{"color":"rgba(16,78,139,1)"},"error_y":{"color":"rgba(16,78,139,1)"},"error_x":{"color":"rgba(16,78,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Cardiovascular","Respiratory","Injury/Trauma","Mental Health","Other/Unknown"],"y":[0.18486449043207204,0.21075417785089617,0.53203740583600312,0.071824400380985365,0.00051952550004329384],"type":"bar","name":"PIH Health Whittier Hospital","marker":{"color":"rgba(205,173,0,1)","line":{"color":"rgba(205,173,0,1)"}},"textfont":{"color":"rgba(205,173,0,1)"},"error_y":{"color":"rgba(205,173,0,1)"},"error_x":{"color":"rgba(205,173,0,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="age-distribution-proportions" class="level5">
+<h5 class="anchored" data-anchor-id="age-distribution-proportions">Age distribution proportions</h5>
+<p>Visualizing age distribution proportions across hospitals in a combined line chart highlights the relative share of patients in each age group. By using proportions instead of raw counts, the chart allows for fair comparison across facilities of different sizes and makes demographic patterns clearer—showing how pediatric, adult, and elderly populations vary in their representation across hospitals. This approach helps identify differences in age‑specific demand for care and resource allocation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># USING age distribition prop</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>age_long <span class="ot">&lt;-</span> age_props <span class="sc">%&gt;%</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">0–9 years</span><span class="st">`</span>   <span class="ot">=</span> age_0_09_prop,</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">10–19 years</span><span class="st">`</span> <span class="ot">=</span> age_10_19_prop,</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">20–29 years</span><span class="st">`</span> <span class="ot">=</span> age_20_29_prop,</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">30–39 years</span><span class="st">`</span> <span class="ot">=</span> age_30_39_prop,</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">40–49 years</span><span class="st">`</span> <span class="ot">=</span> age_40_49_prop,</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">50–59 years</span><span class="st">`</span> <span class="ot">=</span> age_50_59_prop,</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">60–69 years</span><span class="st">`</span> <span class="ot">=</span> age_60_69_prop,</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">70–79 years</span><span class="st">`</span> <span class="ot">=</span> age_70_79_prop,</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">80+ years</span><span class="st">`</span>   <span class="ot">=</span> age_80_prop</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">`</span><span class="at">0–9 years</span><span class="st">`</span>, <span class="st">`</span><span class="at">10–19 years</span><span class="st">`</span>, <span class="st">`</span><span class="at">20–29 years</span><span class="st">`</span>,</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>                        <span class="st">`</span><span class="at">30–39 years</span><span class="st">`</span>, <span class="st">`</span><span class="at">40–49 years</span><span class="st">`</span>, <span class="st">`</span><span class="at">50–59 years</span><span class="st">`</span>,</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>                        <span class="st">`</span><span class="at">60–69 years</span><span class="st">`</span>, <span class="st">`</span><span class="at">70–79 years</span><span class="st">`</span>, <span class="st">`</span><span class="at">80+ years</span><span class="st">`</span>),</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"age_group"</span>,</span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"proportion"</span>)</span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(age_long,</span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> <span class="sc">~</span>age_group,</span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="sc">~</span>proportion,</span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="sc">~</span>facility,</span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">colors =</span> hospital_colors,</span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">'scatter'</span>,</span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">mode =</span> <span class="st">'lines+markers'</span>,</span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">line =</span> <span class="fu">list</span>(<span class="at">width =</span> <span class="dv">3</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">title =</span> <span class="st">"Age Distribution Proportions – All Hospitals"</span>,</span>
+<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a>         <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Age Group"</span>, <span class="at">tickangle =</span> <span class="dv">45</span>),</span>
+<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a>         <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Proportion of Total Patients"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-b1411e93847b35112a28" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-b1411e93847b35112a28">{"x":{"visdat":{"13da56aff8059":["function () ","plotlyVisDat"]},"cur_data":"13da56aff8059","attrs":{"13da56aff8059":{"x":{},"y":{},"mode":"lines+markers","line":{"width":3},"color":{},"colors":["darkred","dodgerblue4","gold3"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Age Distribution Proportions – All Hospitals","xaxis":{"domain":[0,1],"automargin":true,"title":"Age Group","tickangle":45,"type":"category","categoryorder":"array","categoryarray":["0–9 years","10–19 years","20–29 years","30–39 years","40–49 years","50–59 years","60–69 years","70–79 years","80+ years"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Proportion of Total Patients"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["0–9 years","10–19 years","20–29 years","30–39 years","40–49 years","50–59 years","60–69 years","70–79 years","80+ years"],"y":[0.1016156462585034,0.11019635126777984,0.1627435064935065,0.15797000618429191,0.12577303648732222,0.11810064935064934,0.10358688930117502,0.070810142238713666,0.04920377241805813],"mode":"lines+markers","line":{"color":"rgba(139,0,0,1)","width":3},"type":"scatter","name":"PIH Health Downey Hospital","marker":{"color":"rgba(139,0,0,1)","line":{"color":"rgba(139,0,0,1)"}},"textfont":{"color":"rgba(139,0,0,1)"},"error_y":{"color":"rgba(139,0,0,1)"},"error_x":{"color":"rgba(139,0,0,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["0–9 years","10–19 years","20–29 years","30–39 years","40–49 years","50–59 years","60–69 years","70–79 years","80+ years"],"y":[0.021700413732635558,0.045811984546675066,0.18174096501082282,0.20357837630490178,0.15678000931583419,0.13749075266460256,0.12710633750719239,0.076910430994328302,0.04888072992300737],"mode":"lines+markers","line":{"color":"rgba(16,78,139,1)","width":3},"type":"scatter","name":"PIH Health Good Samaritan Hospital","marker":{"color":"rgba(16,78,139,1)","line":{"color":"rgba(16,78,139,1)"}},"textfont":{"color":"rgba(16,78,139,1)"},"error_y":{"color":"rgba(16,78,139,1)"},"error_x":{"color":"rgba(16,78,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["0–9 years","10–19 years","20–29 years","30–39 years","40–49 years","50–59 years","60–69 years","70–79 years","80+ years"],"y":[0.10442411247688102,0.096600487748989314,0.14801054061574218,0.14972911926935856,0.12049691474213137,0.11543938327577459,0.1051279113540763,0.084995989983141562,0.0751755405339051],"mode":"lines+markers","line":{"color":"rgba(205,173,0,1)","width":3},"type":"scatter","name":"PIH Health Whittier Hospital","marker":{"color":"rgba(205,173,0,1)","line":{"color":"rgba(205,173,0,1)"}},"textfont":{"color":"rgba(205,173,0,1)"},"error_y":{"color":"rgba(205,173,0,1)"},"error_x":{"color":"rgba(205,173,0,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,17 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "PM 566 Final Project"
+  navbar:
+    right:
+      - href: index.qmd
+        text: "Final Report"
+      - href: data.qmd
+        text: "Data Processing"
+format:
+  html:
+    theme: flatly
+    toc: true
+    code-fold: true

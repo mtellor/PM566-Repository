@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Comparative Analysis of PIH Health Emergency Department Visits</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="index_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="index_files/libs/quarto-html/anchor.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="index_files/libs/bootstrap/bootstrap-81267100e462c21b3d6c0d5bf76a3417.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="index_files/libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="index_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="index_files/libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="index_files/libs/leaflet-1.3.1/leaflet.css" rel="stylesheet">
+<script src="index_files/libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="index_files/libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
+<script src="index_files/libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="index_files/libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="index_files/libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
+<script src="index_files/libs/leaflet-binding-2.2.3/leaflet.js"></script>
+<script src="index_files/libs/leaflet-providers-2.0.0/leaflet-providers_2.0.0.js"></script>
+<script src="index_files/libs/leaflet-providers-plugin-2.2.3/leaflet-providers-plugin.js"></script>
+<link href="index_files/libs/leaflet-awesomemarkers-2.0.3/leaflet.awesome-markers.css" rel="stylesheet">
+<script src="index_files/libs/leaflet-awesomemarkers-2.0.3/leaflet.awesome-markers.min.js"></script>
+<script src="index_files/libs/plotly-binding-4.11.0/plotly.js"></script>
+<script src="index_files/libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="index_files/libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="index_files/libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="index_files/libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="index_files/libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Comparative Analysis of PIH Health Emergency Department Visits</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>Emergency departments (EDs) are a front door to hospital care and a mirror of community needs. This report compares ED utilization across three PIH Health hospitals in Los Angeles County (PIH Health Whittier, PIH Health Downey, and PIH Health Good Samaritan) to understand how patient pathways differ by hospital context. Each hospital serves a distinct catchment: suburban Whittier, community Downey, and urban Good Samaritan near Downtown LA. Together they provide an interesting snapshot of how payer mix, diagnosis burden, and patient demographics shape ED outcomes.</p>
+<p>These hospitals were chosen due to both personal connections and their geographic diversity, which makes them a meaningful case study. I have volunteered for over four years in Whittier’s ED, where I witnessed the rhythms of a suburban hospital serving families and older adults. At Good Samaritan, I work as an EMT/ED Tech, where the downtown setting brings in a more diverse patient population with complex social and medical needs. Downey, close to my home, represents a community hospital that balances high Medi‑Cal reliance with strong ties to local neighborhoods. Experiencing these environments firsthand has shown me how the same emergency care framework can look very different depending on the community it serves. More recently, physicians from Whittier and Downey have begun working shifts at the Good Samaritan campus, and they too have remarked on how dramatically different the patient needs are and how much higher the acuity tends to be in the downtown setting. Their observations, combined with my own experiences across these hospitals, sparked my interest in using this dataset to explore these differences systematically as the focus of my research project.</p>
+<p>This project is not only an academic exercise but also a way to connect data with lived experience. By comparing these three hospitals, I aim to highlight how differences in payer mix, diagnosis categories, and patient demographics translate into distinct ED disposition patterns. The analysis reflects both the numbers in the dataset and the human realities I have observed on the ground.</p>
+<section id="research-questions" class="level3">
+<h3 class="anchored" data-anchor-id="research-questions">Research Questions</h3>
+<section id="primary-question" class="level4">
+<h4 class="anchored" data-anchor-id="primary-question">Primary question</h4>
+<p>How do ED disposition patterns vary across PIH Whittier, PIH Downey, and PIH Good Samaritan, and how do these hospital‑level differences align with payer mix, diagnosis categories, and age distribution?</p>
+</section>
+<section id="secondary-questions" class="level4">
+<h4 class="anchored" data-anchor-id="secondary-questions">Secondary questions</h4>
+<ul>
+<li>Which hospitals show higher rates of patients leaving AMA, and what hospital‑level characteristics (payer mix, diagnosis categories, age distribution) coincide with those differences?</li>
+<li>Across hospitals, how do differences in payer mix (e.g., proportions of publicly insured or uninsured patients) correspond with dispositions such as skilled nursing, psychiatric care, or leaving AMA?</li>
+<li>How do hospitals with higher proportions of mental health diagnoses compare in their rates of psychiatric transfers or AMA dispositions?</li>
+</ul>
+</section>
+</section>
+<section id="importance" class="level3">
+<h3 class="anchored" data-anchor-id="importance">Importance</h3>
+<p>Differences in ED pathways, i.e., who gets admitted, transferred, discharged, or leaves AMA, carry operational and equity implications. They inform resource planning (behavioral health capacity, post‑acute care networks), coordination with community providers, and strategies to reduce avoidable returns or AMA events, especially for safety‑net populations.</p>
+</section>
+</section>
+<section id="methods" class="level2">
+<h2 class="anchored" data-anchor-id="methods">Methods</h2>
+<section id="data-source" class="level3">
+<h3 class="anchored" data-anchor-id="data-source">Data Source</h3>
+<p>This analysis uses the <a href="https://data.chhs.ca.gov/dataset/hospital-emergency-department-characteristics-by-facility-pivot-profile"><strong>2024 Emergency Department Pivot Profile</strong></a> published by the California Department of Health Care Access and Information. The dataset aggregates ED visits at the facility level, including counts for patient dispositions (e.g., routine discharge, inpatient transfer, psychiatric transfer, skilled nursing/custodial care, against medical advice, expired), payer categories (Medi‑Cal, Medicare, private insurance, self‑pay/uninsured), diagnosis groups (e.g., injury/poisoning, mental health, respiratory, circulatory), and demographic summaries (age, sex, race/ethnicity, preferred language). Because the data are aggregated, no individually identifiable health information is included.</p>
+<p>For this project, we focus on three PIH Health hospitals in Los Angeles County:</p>
+<ul>
+<li><strong>PIH Health Whittier Hospital</strong> (suburban, large bed size)</li>
+<li><strong>PIH Health Downey Hospital</strong> (small community hospital)</li>
+<li><strong>PIH Health Good Samaritan Hospital</strong> (urban, downtown catchment)</li>
+</ul>
+</section>
+<section id="data-preparation" class="level3">
+<h3 class="anchored" data-anchor-id="data-preparation">Data Preparation</h3>
+<p>The raw dataset was imported into R as a CSV file. Initial exploratory checks (<code>dim()</code>, <code>str()</code>, <code>head()</code>, <code>names()</code>) were conducted to confirm the dataset’s dimensions, variable names, and structure. This analysis ensured that the dataset contained the expected hospital records and helped identify missing values, anomalies, and variable groupings. Since this project focuses on the three PIH Health hospitals, only those facilities were retained for the dataset.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Dataset Dimensions</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Rows</th>
+<th style="text-align: right;">Columns</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">183</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>First 10 Columns</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Column</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">oshpd_id2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">oshpd_id</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">lat</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">long</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FACILITY_NAME</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">LICENSE_CATEGORY_DESC</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">COUNTY_NAME</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DBA_ADDRESS1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DBA_CITY</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DBA_ZIP_CODE</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<section id="cleaning" class="level4">
+<h4 class="anchored" data-anchor-id="cleaning">Cleaning</h4>
+<p>Numeric fields with missing values were replaced with 0 to avoid skewing totals, while columns with character fields with missing values were removed. This was done as fields with missing values indicate that variable is not applicable to the selected hospitals in this dataset. Numeric columns were checked for negative entries, which would be invalid in count data. None were found.</p>
+<p><br>
+Variable names were standardized to lowercase and simplified for ease of coding (e.g.&nbsp;<code>facility_name</code> to <code>facility</code>, <code>disp_against_medical_advice</code> to <code>disp_ama</code>). After this step, a new dataset was created, titled <code>ed_clean</code>, as now all the data is clean and ready to evaluated.</p>
+<p><br>
+However, from the full dataset, only relevant variables were retained to reduce the amount of unneeded information, including:</p>
+<ul>
+<li>Facility identifiers (name, city, zip code, service area)</li>
+<li>Dispositions (acute care, AMA, psychiatric transfer, SNF, death, routine discharge, etc.)</li>
+<li>Demographics (age group, sex, race/ethnicity, language)</li>
+<li>Diagnosis categories (circulatory, respiratory, injury/poisoning, mental health, digestive, musculoskeletal, etc.)
+<ul>
+<li>Diagnosis categories were collapsed into five broad groups (cardiovascular, respiratory, injury/trauma, mental health, other) to simplify comparisons</li>
+</ul></li>
+<li>Capacity measures (licensed inpatient beds, ED treatment stations)</li>
+</ul>
+<p><br>
+To enable meaningful comparisons across hospitals, counts were normalized into proportions:</p>
+<ul>
+<li>Disposition proportions: AMA, psychiatric transfer, SNF, and death dispositions expressed as a percentage of total dispositions</li>
+<li>Payer mix proportions: Each payer category expressed as a percentage of total payer counts</li>
+<li>Diagnosis group proportions: Cardiovascular, respiratory, injury, mental health, and “other” diagnoses expressed as a percentage of total diagnoses</li>
+</ul>
+<p>The retainment of only relevant variables and addition of proportions and ratios saw the creation of a new dataset: <code>ed_slim</code>, the slimmed dataset that we’ll be using for the rest of the project. This new dataset was rechecked for it’s dimensions using <code>dim(ed_slim)</code>, <code>names(ed_slim)</code>, and <code>summary()</code>.</p>
+<p>At this point, all the raw data looked good. Now, we begin adding our own columns, to normalize the data so data from all three hospitals can be directly compared to one another. This saw the creation of a total dispositions column, which summed up all disposition categories within each hospital. This also came with the creation of new variables for key disposition proportions, including psych transfer, SNF care, death, and AMA. The same was done for payer mix categories, including Medi-Care, Medical, private, public, self-pay/uninsured.</p>
+</section>
+</section>
+<section id="tools" class="level3">
+<h3 class="anchored" data-anchor-id="tools">Tools</h3>
+<ul>
+<li>R was used for data cleaning and analysis</li>
+<li>Quarto was used for reporting and website generation</li>
+<li>Github was used to host all files, including this generated website</li>
+</ul>
+</section>
+</section>
+<section id="results" class="level2">
+<h2 class="anchored" data-anchor-id="results">Results</h2>
+<section id="characteristics-of-pih-health-hospitals" class="level3">
+<h3 class="anchored" data-anchor-id="characteristics-of-pih-health-hospitals">Characteristics of PIH Health Hospitals</h3>
+<p>Our analysis begins with a geographic overview of the three PIH Health hospitals included in this study. Location is a critical contextual factor: it shapes the patient populations that present to each emergency department and influences the mix of clinical and social needs. To visualize this, a map was generated using Leaflet in R.</p>
+<ul>
+<li><strong>PIH Health Whittier Hospital</strong> lies further east in LA, in a suburban catchment, which serves a major hospital for the area, with no hospital of its size seen within the city of Whittier and nearby Pico Rivera and Montebello.</li>
+<li><strong>PIH Health Downey Hospital</strong> sits in a community setting southeast of Los Angeles, serving a largely local population
+<ul>
+<li>It’s important to note that just nearby is a major Kaiser Permanente Hospital (Downey location), which is a regional Kaiser Permanente center; it’s important to know this as patients who otherwise don’t have a Kaiser Permanente care plan would most likely go to PIH Downey, which accepts almost all insurance types</li>
+</ul></li>
+<li><strong>PIH Health Good Samaritan Hospital</strong> (Good Sam) is located in Downtown Los Angeles, where the urban environment brings in a highly diverse patient population with higher acuity and complex social needs, even more so than that of Downey and Whittier</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-d7f20f8329a9ac25f761" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-d7f20f8329a9ac25f761">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["CartoDB.Positron",null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addAwesomeMarkers","args":[[33.968829,33.935017,34.054334],[-118.048719,-118.130489,-118.265557],null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},["PIH Health Whittier Hospital","PIH Health Downey Hospital","PIH Health Good Samaritan Hospital"],null,null,null,["PIH Health Whittier Hospital","PIH Health Downey Hospital","PIH Health Good Samaritan Hospital"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[33.935017,34.054334],"lng":[-118.265557,-118.048719]}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<section id="inpatient-bed-capacity" class="level4">
+<h4 class="anchored" data-anchor-id="inpatient-bed-capacity">Inpatient Bed Capacity</h4>
+<p>Now, let’s compare each hospital’s licensed inpatient bed capacity, which provides important context for interpreting ED dispositions. Bed size reflects each hospital’s ability to absorb admissions from the emergency department and can influence patterns such as inpatient transfers, AMA events, or reliance on post‑acute care.</p>
+<ul>
+<li><strong>Whittier</strong> has the largest capacity, consistent with its role as a suburban tertiary hospital serving families and older adults</li>
+<li><strong>Downey</strong> has a smaller footprint, reflecting its community hospital profile</li>
+<li><strong>Good Sam</strong> sits between the two, with a downtown catchment that often brings higher acuity patients despite a more moderate bed size</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="emergency-department-capacity" class="level4">
+<h4 class="anchored" data-anchor-id="emergency-department-capacity">Emergency Department Capacity</h4>
+<p>In addition to inpatient capacity, the number of licensed ED treatment stations (beds) provides important context for understanding patient flow. ED bed counts reflect how much volume each hospital can accommodate at the “front door” of care, which in turn shapes crowding, wait times, and disposition patterns.</p>
+<p>The bar chart below shows the number of licensed ED beds at each facility:</p>
+<ul>
+<li><strong>Whittier</strong> has the largest ED footprint, consistent with its role as a suburban tertiary hospital with high patient volume.</li>
+<li><strong>Downey</strong> has fewer ED beds, reflecting its smaller community hospital profile.</li>
+<li><strong>Good Sam</strong> has the least number of ED beds, but its downtown location means those stations often serve a more complex and higher‑acuity patient population compared to Whittier and Downey.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="overall-dispositions" class="level4">
+<h4 class="anchored" data-anchor-id="overall-dispositions">Overall Dispositions</h4>
+<p>Now understanding the general set-up of the hospitals and their size, let’s take a look at how many total dispositions (dispos) each hospital had. This gives us a general idea of how many patients were seen in each ED.</p>
+<ul>
+<li><strong>Whittier</strong> saw the highest number of dispos, which is consistent with its larger inpatient and ED bed capacity</li>
+<li><strong>Downey</strong> had fewer dispos, but still had significantly more than Good Sam, reflecting its smaller community footprint and bigger ED bed capacity than Good Sam, but is higher than expected for a hospital with just under 200 inpatient beds.</li>
+<li><strong>Good Sam</strong> had the fewest total dispos in 2024, with around 36,000, which is consistent for it’s total ED bed capacity, but lower than what is expected for a hospital of just over 400 licensed inpatient beds.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="key-disposition-categories" class="level4">
+<h4 class="anchored" data-anchor-id="key-disposition-categories">Key Disposition Categories</h4>
+<p>Beyond overall volume, it is important to examine specific disposition pathways that carry operational and equity implications. Four categories were selected for comparison across hospitals (Against Medical Advice (AMA), Psychiatric Care Transfers, Skilled Nursing Facility (SNF) Transfers, and Deaths in the ED) because each reflects a critical juncture in patient care where system pressures, resource availability, and equity concerns are most visible.</p>
+<p>As seen below, Good Sam had highest number of AMA events, reflecting the challenges of serving a downtown population with complex social needs and barriers to care. Psych transfers were more prominent at Whittier, which reflects its higher ED bed capacity, but Good Sam follows closely behind as well.</p>
+<p>Given the that Good Sam has significantly less total dispos than Whittier but also has lots of psych transfers, psychiatric care/diagnoses seem to be an important aspect to uncover for these hospitals. Similarly, SNF transfers were the highest at Good Sam, with Downey following closely behind.</p>
+<p>Understanding insurance types at these two hospitals also seems important, as most SNF patients are insured through Medicare and Medicaid. Deaths in the hospitals were relatively rare across all three hospitals, but Good Sam shows slightly higher counts, again reflecting its higher acuity downtown catchment.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-0b491e1632ae6c294476" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-0b491e1632ae6c294476">{"x":{"visdat":{"134594d54dbdb":["function () ","plotlyVisDat"]},"cur_data":"134594d54dbdb","attrs":{"134594d54dbdb":{"x":{},"y":{},"color":{},"colors":["darkred","dodgerblue4","gold3"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"barmode":"group","xaxis":{"domain":[0,1],"automargin":true,"title":"Disposition Type","type":"category","categoryorder":"array","categoryarray":["AMA","Death","Psych","SNF"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Number of Dispositions"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["AMA","Psych","SNF","Death"],"y":[716,148,237,20],"type":"bar","name":"PIH Health Downey Hospital","marker":{"color":"rgba(139,0,0,1)","line":{"color":"rgba(139,0,0,1)"}},"textfont":{"color":"rgba(139,0,0,1)"},"error_y":{"color":"rgba(139,0,0,1)"},"error_x":{"color":"rgba(139,0,0,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["AMA","Psych","SNF","Death"],"y":[2273,389,260,80],"type":"bar","name":"PIH Health Good Samaritan Hospital","marker":{"color":"rgba(16,78,139,1)","line":{"color":"rgba(16,78,139,1)"}},"textfont":{"color":"rgba(16,78,139,1)"},"error_y":{"color":"rgba(16,78,139,1)"},"error_x":{"color":"rgba(16,78,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["AMA","Psych","SNF","Death"],"y":[1021,535,151,63],"type":"bar","name":"PIH Health Whittier Hospital","marker":{"color":"rgba(205,173,0,1)","line":{"color":"rgba(205,173,0,1)"}},"textfont":{"color":"rgba(205,173,0,1)"},"error_y":{"color":"rgba(205,173,0,1)"},"error_x":{"color":"rgba(205,173,0,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="payer-mix" class="level4">
+<h4 class="anchored" data-anchor-id="payer-mix">Payer Mix</h4>
+<p>Understanding payer mix is essential for interpreting ED outcomes, since insurance coverage shapes both access to care and post‑ED pathways.</p>
+<p><strong>Downey</strong> had the highest Medical patient rate, with over 30k (which is significantly high, considering the total dispo rate for the hospital is 51k). This suggests, and reflects, Downey’s role as a community hospital serving as a largely local, lower-income population.</p>
+<p><strong>Whittier</strong> has the strongest presence of Medicare, reflecting its older suburban patient base and larger proportion of seniors.</p>
+<p><strong>Good Sam</strong> demostrates a more diverse payer mix, with noteable shares of Medical and Medicare, together making up about 27k patients (of it’s total 36k total patients/dispos seen in 2024). Good Sam also had the highest rate of uninsured patients. This reflects the socioeconomic diversity of Good Sams downtown catchment.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-dd77e493cf462d787c7f" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-dd77e493cf462d787c7f">{"x":{"visdat":{"1345914a11d47":["function () ","plotlyVisDat"]},"cur_data":"1345914a11d47","attrs":{"1345914a11d47":{"x":{},"y":{},"color":{},"colors":["darkred","dodgerblue4","gold3"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"barmode":"group","xaxis":{"domain":[0,1],"automargin":true,"title":"Payer Type","tickangle":45,"type":"category","categoryorder":"array","categoryarray":["All_Other","Medical","Medicare","Other_Gov","Private","Uninsured","Unknown"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Number of Dispositions"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["Medical","Medicare","Private","Uninsured","All_Other","Other_Gov","Unknown"],"y":[30597,8198,9719,2513,297,207,227],"type":"bar","name":"PIH Health Downey Hospital","marker":{"color":"rgba(139,0,0,1)","line":{"color":"rgba(139,0,0,1)"}},"textfont":{"color":"rgba(139,0,0,1)"},"error_y":{"color":"rgba(139,0,0,1)"},"error_x":{"color":"rgba(139,0,0,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Medical","Medicare","Private","Uninsured","All_Other","Other_Gov","Unknown"],"y":[21256,6483,4131,4367,232,82,6],"type":"bar","name":"PIH Health Good Samaritan Hospital","marker":{"color":"rgba(16,78,139,1)","line":{"color":"rgba(16,78,139,1)"}},"textfont":{"color":"rgba(16,78,139,1)"},"error_y":{"color":"rgba(16,78,139,1)"},"error_x":{"color":"rgba(16,78,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Medical","Medicare","Private","Uninsured","All_Other","Other_Gov","Unknown"],"y":[26662,12627,17136,3240,698,380,369],"type":"bar","name":"PIH Health Whittier Hospital","marker":{"color":"rgba(205,173,0,1)","line":{"color":"rgba(205,173,0,1)"}},"textfont":{"color":"rgba(205,173,0,1)"},"error_y":{"color":"rgba(205,173,0,1)"},"error_x":{"color":"rgba(205,173,0,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="diagnosis-categories" class="level4">
+<h4 class="anchored" data-anchor-id="diagnosis-categories">Diagnosis Categories</h4>
+<p>Diagnosis burden provides another lens for understanding differences in ED utilization across hospitals. The grouped bar chart below compares five broad diagnostic categories: cardiovascular, respiratory, injury, mental health, and other/unknown.</p>
+<p>Whittier shows the highest counts of cardiovascular, injury, and respiratory diagnoses, followed by Downey. Noteably, Good Sam has the lowest counts for all diagnoses, but had the highest amount of mental health diagnoses of all three hospitals.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-375fb87012c8347b3348" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-375fb87012c8347b3348">{"x":{"visdat":{"134595994f557":["function () ","plotlyVisDat"]},"cur_data":"134595994f557","attrs":{"134595994f557":{"x":{},"y":{},"color":{},"colors":["darkred","dodgerblue4","gold3"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"barmode":"group","xaxis":{"domain":[0,1],"automargin":true,"title":"Diagnosis Category","tickangle":45,"type":"category","categoryorder":"array","categoryarray":["Cardio","Injury","Mental","Other_Unknown","Respiratory"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Number of Dispositions"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["Cardio","Respiratory","Injury","Mental","Other_Unknown"],"y":[3550,4030,9400,1126,12],"type":"bar","name":"PIH Health Downey Hospital","marker":{"color":"rgba(139,0,0,1)","line":{"color":"rgba(139,0,0,1)"}},"textfont":{"color":"rgba(139,0,0,1)"},"error_y":{"color":"rgba(139,0,0,1)"},"error_x":{"color":"rgba(139,0,0,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Cardio","Respiratory","Injury","Mental","Other_Unknown"],"y":[2566,2236,8052,2151,6],"type":"bar","name":"PIH Health Good Samaritan Hospital","marker":{"color":"rgba(16,78,139,1)","line":{"color":"rgba(16,78,139,1)"}},"textfont":{"color":"rgba(16,78,139,1)"},"error_y":{"color":"rgba(16,78,139,1)"},"error_x":{"color":"rgba(16,78,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Cardio","Respiratory","Injury","Mental","Other_Unknown"],"y":[4270,4868,12289,1659,12],"type":"bar","name":"PIH Health Whittier Hospital","marker":{"color":"rgba(205,173,0,1)","line":{"color":"rgba(205,173,0,1)"}},"textfont":{"color":"rgba(205,173,0,1)"},"error_y":{"color":"rgba(205,173,0,1)"},"error_x":{"color":"rgba(205,173,0,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="disposition-proportions" class="level4">
+<h4 class="anchored" data-anchor-id="disposition-proportions">Disposition Proportions</h4>
+<p>While absolute counts highlight overall volume, proportions provide a clearer picture of how patient pathways differ relative to each hospital’s size. Looking at the four key dispositions (AMA, death, psych transfer, SNF), <strong>Good Sam</strong> has the highest rate for all key dispos when looking at proportions instead of raw counts.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-c4ab7c50cbd04942172c" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-c4ab7c50cbd04942172c">{"x":{"visdat":{"1345948fbaeaf":["function () ","plotlyVisDat"]},"cur_data":"1345948fbaeaf","attrs":{"1345948fbaeaf":{"x":{},"y":{},"color":{},"colors":["darkred","dodgerblue4","gold3"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"barmode":"group","xaxis":{"domain":[0,1],"automargin":true,"title":"Disposition Type","tickangle":45,"type":"category","categoryorder":"array","categoryarray":["AMA","Death","Psych Transfer","SNF"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Proportion of Total Dispositions"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["AMA","Psych Transfer","SNF","Death"],"y":[0.013833610263147725,0.0028594613393098651,0.0045790022798407977,0.00038641369450133313],"type":"bar","name":"PIH Health Downey Hospital","marker":{"color":"rgba(139,0,0,1)","line":{"color":"rgba(139,0,0,1)"}},"textfont":{"color":"rgba(139,0,0,1)"},"error_y":{"color":"rgba(139,0,0,1)"},"error_x":{"color":"rgba(139,0,0,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["AMA","Psych Transfer","SNF","Death"],"y":[0.062176874470005743,0.010640916924255273,0.0071121809776513393,0.0021883633777388736],"type":"bar","name":"PIH Health Good Samaritan Hospital","marker":{"color":"rgba(16,78,139,1)","line":{"color":"rgba(16,78,139,1)"}},"textfont":{"color":"rgba(16,78,139,1)"},"error_y":{"color":"rgba(16,78,139,1)"},"error_x":{"color":"rgba(16,78,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["AMA","Psych Transfer","SNF","Death"],"y":[0.016707029715931406,0.0087544181175546534,0.0024708731509359865,0.001030894096085875],"type":"bar","name":"PIH Health Whittier Hospital","marker":{"color":"rgba(205,173,0,1)","line":{"color":"rgba(205,173,0,1)"}},"textfont":{"color":"rgba(205,173,0,1)"},"error_y":{"color":"rgba(205,173,0,1)"},"error_x":{"color":"rgba(205,173,0,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="payer-mix-proportions" class="level4">
+<h4 class="anchored" data-anchor-id="payer-mix-proportions">Payer Mix Proportions</h4>
+<p>Also looking at proportions rather than raw counts for insurance coverage gives a clearer picture at relative differences to each hospital’s patient payer mix. Downey has the highest proportion of Medi-Cal patients along with Good Sam close behind. This is a strong reflection of both hospital’s role as serving a largely low-income population with differing social needs. Whittier on the other hand had slightly higher Medicare rates, along with the highest rate for private insurances, which may be a reflection of better socioeconomic standing than that of the population served by Downey and Whittier. Noteably, Good Sam has the highest proportion of uninsured patients compared to Whittier and Downey.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-be19a533cce4122541d8" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-be19a533cce4122541d8">{"x":{"visdat":{"134592cf323bc":["function () ","plotlyVisDat"]},"cur_data":"134592cf323bc","attrs":{"134592cf323bc":{"x":{},"y":{},"color":{},"colors":["darkred","dodgerblue4","gold3"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"barmode":"group","xaxis":{"domain":[0,1],"automargin":true,"title":"Payer Type","tickangle":45,"type":"category","categoryorder":"array","categoryarray":["All Other Payers","Medi-Cal","Medicare","Other Government","Private Insurance","Uninsured","Unknown"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Proportion of Total Payer Mix"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["Medi-Cal","Medicare","Private Insurance","Uninsured","All Other Payers","Other Government","Unknown"],"y":[0.59115499053286447,0.15839097337609645,0.18777773484292284,0.048552880714092507,0.0057382433633447966,0.0039993817380887982,0.0043857954325901309],"type":"bar","name":"PIH Health Downey Hospital","marker":{"color":"rgba(139,0,0,1)","line":{"color":"rgba(139,0,0,1)"}},"textfont":{"color":"rgba(139,0,0,1)"},"error_y":{"color":"rgba(139,0,0,1)"},"error_x":{"color":"rgba(139,0,0,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Medi-Cal","Medicare","Private Insurance","Uninsured","All Other Payers","Other Government","Unknown"],"y":[0.58144814946521872,0.17733949722351397,0.11300161391799109,0.11945728588232075,0.006346253795442733,0.0022430724621823454,0.00016412725333041551],"type":"bar","name":"PIH Health Good Samaritan Hospital","marker":{"color":"rgba(16,78,139,1)","line":{"color":"rgba(16,78,139,1)"}},"textfont":{"color":"rgba(16,78,139,1)"},"error_y":{"color":"rgba(16,78,139,1)"},"error_x":{"color":"rgba(16,78,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Medi-Cal","Medicare","Private Insurance","Uninsured","All Other Payers","Other Government","Unknown"],"y":[0.43628092682288255,0.20662063097264038,0.28040319413535802,0.053017410655845004,0.011421652048697474,0.0062180913732163895,0.0060380939913601255],"type":"bar","name":"PIH Health Whittier Hospital","marker":{"color":"rgba(205,173,0,1)","line":{"color":"rgba(205,173,0,1)"}},"textfont":{"color":"rgba(205,173,0,1)"},"error_y":{"color":"rgba(205,173,0,1)"},"error_x":{"color":"rgba(205,173,0,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="diagnosis-category-proportions" class="level4">
+<h4 class="anchored" data-anchor-id="diagnosis-category-proportions">Diagnosis Category Proportions</h4>
+<p>When looking at proportions for diagnosis categories, Good Sam has the highest injury/trauma proportion compared to Whittier and Downey, along with a higher proportion of mental health diagnoses than both hospitals. Downey seems to have a higher rate of diagnoses for cardiovascular and respiratory conditions than the other two hospitals.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-28983f999c1d342bfed8" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-28983f999c1d342bfed8">{"x":{"visdat":{"1345923767579":["function () ","plotlyVisDat"]},"cur_data":"1345923767579","attrs":{"1345923767579":{"x":{},"y":{},"color":{},"colors":["darkred","dodgerblue4","gold3"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"barmode":"group","xaxis":{"domain":[0,1],"automargin":true,"title":"Diagnosis Category","tickangle":45,"type":"category","categoryorder":"array","categoryarray":["Cardiovascular","Injury/Trauma","Mental Health","Other/Unknown","Respiratory"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Proportion of Total Diagnoses"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["Cardiovascular","Respiratory","Injury/Trauma","Mental Health","Other/Unknown"],"y":[0.1959377414725687,0.2224307318688597,0.5188210619273651,0.062148139971299261,0.00066232475990727453],"type":"bar","name":"PIH Health Downey Hospital","marker":{"color":"rgba(139,0,0,1)","line":{"color":"rgba(139,0,0,1)"}},"textfont":{"color":"rgba(139,0,0,1)"},"error_y":{"color":"rgba(139,0,0,1)"},"error_x":{"color":"rgba(139,0,0,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Cardiovascular","Respiratory","Injury/Trauma","Mental Health","Other/Unknown"],"y":[0.17094130970621543,0.14895743121710744,0.53640663513423492,0.14329491706082206,0.00039970688162014521],"type":"bar","name":"PIH Health Good Samaritan Hospital","marker":{"color":"rgba(16,78,139,1)","line":{"color":"rgba(16,78,139,1)"}},"textfont":{"color":"rgba(16,78,139,1)"},"error_y":{"color":"rgba(16,78,139,1)"},"error_x":{"color":"rgba(16,78,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Cardiovascular","Respiratory","Injury/Trauma","Mental Health","Other/Unknown"],"y":[0.18486449043207204,0.21075417785089617,0.53203740583600312,0.071824400380985365,0.00051952550004329384],"type":"bar","name":"PIH Health Whittier Hospital","marker":{"color":"rgba(205,173,0,1)","line":{"color":"rgba(205,173,0,1)"}},"textfont":{"color":"rgba(205,173,0,1)"},"error_y":{"color":"rgba(205,173,0,1)"},"error_x":{"color":"rgba(205,173,0,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="age-distribution-proportions" class="level4">
+<h4 class="anchored" data-anchor-id="age-distribution-proportions">Age Distribution Proportions</h4>
+<p>Demographics provide another important lens for understanding ED utilization. The line chart below shows how Whittier has generally a higher proportion of older patients, specifically those 80 years or older. Good Sam has a a bigger young adult population that both hospitals, with significantly a higher proportion of patients between 20 and 40 years old. Downey has a higher proportion of even younger patients, with a slightly higher pediatric patient population, along with a generally high younger adult population, reflecting it’s importance as a community hospital.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-83d58bb7ee2e02606d0a" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-83d58bb7ee2e02606d0a">{"x":{"visdat":{"134591aa19aeb":["function () ","plotlyVisDat"]},"cur_data":"134591aa19aeb","attrs":{"134591aa19aeb":{"x":{},"y":{},"mode":"lines+markers","line":{"width":3},"color":{},"colors":["darkred","dodgerblue4","gold3"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Age Group","tickangle":45,"type":"category","categoryorder":"array","categoryarray":["0–9 years","10–19 years","20–29 years","30–39 years","40–49 years","50–59 years","60–69 years","70–79 years","80+ years"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Proportion of Total Patients"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["0–9 years","10–19 years","20–29 years","30–39 years","40–49 years","50–59 years","60–69 years","70–79 years","80+ years"],"y":[0.1016156462585034,0.11019635126777984,0.1627435064935065,0.15797000618429191,0.12577303648732222,0.11810064935064934,0.10358688930117502,0.070810142238713666,0.04920377241805813],"mode":"lines+markers","line":{"color":"rgba(139,0,0,1)","width":3},"type":"scatter","name":"PIH Health Downey Hospital","marker":{"color":"rgba(139,0,0,1)","line":{"color":"rgba(139,0,0,1)"}},"textfont":{"color":"rgba(139,0,0,1)"},"error_y":{"color":"rgba(139,0,0,1)"},"error_x":{"color":"rgba(139,0,0,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["0–9 years","10–19 years","20–29 years","30–39 years","40–49 years","50–59 years","60–69 years","70–79 years","80+ years"],"y":[0.021700413732635558,0.045811984546675066,0.18174096501082282,0.20357837630490178,0.15678000931583419,0.13749075266460256,0.12710633750719239,0.076910430994328302,0.04888072992300737],"mode":"lines+markers","line":{"color":"rgba(16,78,139,1)","width":3},"type":"scatter","name":"PIH Health Good Samaritan Hospital","marker":{"color":"rgba(16,78,139,1)","line":{"color":"rgba(16,78,139,1)"}},"textfont":{"color":"rgba(16,78,139,1)"},"error_y":{"color":"rgba(16,78,139,1)"},"error_x":{"color":"rgba(16,78,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["0–9 years","10–19 years","20–29 years","30–39 years","40–49 years","50–59 years","60–69 years","70–79 years","80+ years"],"y":[0.10442411247688102,0.096600487748989314,0.14801054061574218,0.14972911926935856,0.12049691474213137,0.11543938327577459,0.1051279113540763,0.084995989983141562,0.0751755405339051],"mode":"lines+markers","line":{"color":"rgba(205,173,0,1)","width":3},"type":"scatter","name":"PIH Health Whittier Hospital","marker":{"color":"rgba(205,173,0,1)","line":{"color":"rgba(205,173,0,1)"}},"textfont":{"color":"rgba(205,173,0,1)"},"error_y":{"color":"rgba(205,173,0,1)"},"error_x":{"color":"rgba(205,173,0,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="conclusion-summary" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion-summary">Conclusion &amp; Summary</h2>
+<p>This comparative analysis of emergency department utilization across PIH Health Whittier, Downey, and Good Samaritan highlights how hospital context (suburban, community, and urban) shapes patient pathways.</p>
+<p><strong>Key findings:</strong></p>
+<ul>
+<li>Capacity differences
+<ul>
+<li>Whittier has the largest inpatient and ED bed footprint, Downey is smaller but still sees high volume, and Good Samaritan has fewer ED beds yet serves a more complex downtown population.</li>
+</ul></li>
+<li>Disposition patterns
+<ul>
+<li>Good Samaritan shows the highest proportions of AMA events, psychiatric transfers, SNF transfers, and deaths, reflecting its higher acuity and social complexity. Whittier’s larger size drives higher absolute counts, while Downey’s community role produces moderate volumes but notable SNF transfers.</li>
+</ul></li>
+<li>Payer mix
+<ul>
+<li>Downey relies most heavily on Medi‑Cal, Whittier has the strongest Medicare presence, and Good Samaritan demonstrates the most diverse mix with the highest uninsured proportion. These differences align with each hospital’s catchment demographics.</li>
+</ul></li>
+<li>Diagnosis burden
+<ul>
+<li>Whittier and Downey see more cardiovascular and respiratory cases, while Good Samaritan sees more mental health diagnoses. These patterns correspond with age and payer mix differences, as well as demographics of each hospital.</li>
+</ul></li>
+<li>Demographics
+<ul>
+<li>Whittier’s patients skew older, Downey’s population includes more children and younger adults, and Good Samaritan serves a diverse downtown population with a concentration of young adults.</li>
+</ul></li>
+</ul>
+<p>As a reminder, these were our research questions:</p>
+<section id="primary-question-1" class="level5">
+<h5 class="anchored" data-anchor-id="primary-question-1">Primary question</h5>
+<p>How do ED disposition patterns vary across PIH Whittier, PIH Downey, and PIH Good Samaritan, and how do these hospital‑level differences align with payer mix, diagnosis categories, and age distribution?</p>
+</section>
+<section id="secondary-questions-1" class="level5">
+<h5 class="anchored" data-anchor-id="secondary-questions-1">Secondary questions</h5>
+<ul>
+<li>Which hospitals show higher rates of patients leaving AMA, and what hospital‑level characteristics (payer mix, diagnosis categories, age distribution) coincide with those differences?</li>
+<li>Across hospitals, how do differences in payer mix (e.g., proportions of publicly insured or uninsured patients) correspond with dispositions such as skilled nursing, psychiatric care, or leaving AMA?</li>
+<li>How do hospitals with higher proportions of mental health diagnoses compare in their rates of psychiatric transfers or AMA dispositions?</li>
+</ul>
+</section>
+<section id="to-our-answer-our-research-question" class="level5">
+<h5 class="anchored" data-anchor-id="to-our-answer-our-research-question"><strong>To our answer our research question:</strong></h5>
+<ul>
+<li>ED disposition patterns vary substantially across hospitals, with Good Samaritan showing higher rates of AMA and psychiatric transfers, Whittier more SNF transfers, and Downey reflecting community‑level injury and Medi‑Cal reliance.</li>
+<li>AMA rates are highest at Good Samaritan, coinciding with its younger, more uninsured population and higher mental health burden.</li>
+<li>Payer mix differences correspond with dispositions: Whittier’s Medicare footprint aligns with SNF transfers, Downey’s Medi‑Cal reliance reflects community needs, and Good Samaritan’s uninsured share aligns with AMA events.</li>
+<li>Hospitals with higher mental health diagnoses (Good Samaritan) also show higher psychiatric transfers and AMA dispositions, underscoring the link between behavioral health needs and ED pathways.</li>
+</ul>
+</section>
+<section id="implications" class="level4">
+<h4 class="anchored" data-anchor-id="implications"><strong>Implications</strong></h4>
+<p>These findings illustrate how ED outcomes are not uniform but shaped by hospital context, payer mix, diagnosis burden, and demographics. For operational planning, Whittier’s SNF transfers highlight post‑acute care needs, Downey’s Medi‑Cal reliance underscores community safety‑net roles, and Good Samaritan’s AMA, psychiatric transfers, and high proportion of mental health diagnoses, point to gaps in behavioral health and social support.</p>
+</section>
+<section id="limitations" class="level4">
+<h4 class="anchored" data-anchor-id="limitations"><strong>Limitations</strong></h4>
+<p>Because the dataset is aggregated, results reflect hospital‑level patterns rather than individual patient outcomes. The analysis is descriptive and comparative, not causal.</p>
+</section>
+<section id="summary" class="level4">
+<h4 class="anchored" data-anchor-id="summary"><strong>Summary</strong></h4>
+<p>By connecting quantitative data with lived experience, this project shows how three hospitals within the same health system serve very different communities. Understanding these contrasts is critical for designing equitable emergency care strategies that meet patients where they are.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

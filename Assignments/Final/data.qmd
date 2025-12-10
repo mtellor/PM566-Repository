@@ -50,7 +50,7 @@ names(ed)
 head(ed)
 ```
 
-### Cleaning
+###  Cleaning
 
 To prepare the dataset for analysis, several cleaning steps were performed to ensure consistency, accuracy, and relevance:
 
